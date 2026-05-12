@@ -1,0 +1,173 @@
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🤖 agentic secret storage: https://dotenvx.com/as2
+MongoDB | Intentando conectar a Atlas...
+MongoDB | Conexión establecida con éxito
+SEEDER | El administrador ya existe
+Server running on port: 3000
+[REQUEST_DEBUG] OPTIONS /api/books
+[0mOPTIONS /api/books [32m204[0m 0.880 ms - 0[0m
+[REQUEST_DEBUG] POST /api/books
+[0mPOST /api/books [32m201[0m 1443.332 ms - 669[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=20
+[0mOPTIONS /api/books?page=1&limit=20 [32m204[0m 0.154 ms - 0[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.140 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.147 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/analytics
+[0mOPTIONS /api/analytics [32m204[0m 0.082 ms - 0[0m
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/books?page=1&limit=20 [32m200[0m 167.984 ms - 1481[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[0mGET /api/users [36m304[0m 52.892 ms - -[0m
+[0mGET /api/categories [36m304[0m 51.539 ms - -[0m
+[0mGET /api/books?page=1&limit=20 [36m304[0m 158.965 ms - -[0m
+[0mGET /api/analytics [32m200[0m 632.544 ms - 3914[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.060 ms - 0[0m
+[REQUEST_DEBUG] POST /api/categories
+[DEBUG] Creando categoría: { name: 'arte', icon: '🎨', user: '69e7ede86921a1d768ee5a07' }
+[0mPOST /api/categories [32m201[0m 288.037 ms - 209[0m
+[REQUEST_DEBUG] GET /api/categories
+[0mGET /api/categories [32m200[0m 50.567 ms - 482[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=20
+[0mOPTIONS /api/books?page=1&limit=20 [32m204[0m 0.225 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.100 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/analytics
+[0mOPTIONS /api/analytics [32m204[0m 0.053 ms - 0[0m
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/categories [36m304[0m 50.991 ms - -[0m
+[0mGET /api/users [36m304[0m 51.472 ms - -[0m
+[0mGET /api/books?page=1&limit=20 [36m304[0m 155.029 ms - -[0m
+[0mGET /api/analytics [32m200[0m 259.370 ms - 4268[0m
+[REQUEST_DEBUG] OPTIONS /api/books
+[0mOPTIONS /api/books [32m204[0m 0.104 ms - 0[0m
+[REQUEST_DEBUG] POST /api/books
+[0mPOST /api/books [32m201[0m 934.008 ms - 595[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=20
+[0mOPTIONS /api/books?page=1&limit=20 [32m204[0m 0.122 ms - 0[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.046 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.048 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/analytics
+[0mOPTIONS /api/analytics [32m204[0m 0.051 ms - 0[0m
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/users [36m304[0m 52.241 ms - -[0m
+[0mGET /api/categories [36m304[0m 52.535 ms - -[0m
+[0mGET /api/books?page=1&limit=20 [32m200[0m 155.276 ms - 2115[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[0mGET /api/analytics [32m200[0m 259.050 ms - 4651[0m
+[0mGET /api/books?page=1&limit=20 [36m304[0m 151.326 ms - -[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.046 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=0
+[0mOPTIONS /api/books?page=1&limit=0 [32m204[0m 0.034 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.030 ms - 0[0m
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/books?page=1&limit=0
+[0mGET /api/categories [36m304[0m 52.236 ms - -[0m
+[REQUEST_DEBUG] GET /api/categories
+[0mGET /api/categories [36m304[0m 50.818 ms - -[0m
+[0mGET /api/books?page=1&limit=0 [32m200[0m 152.266 ms - 2115[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=0
+[REQUEST_DEBUG] OPTIONS /api/users/favorites
+[0mOPTIONS /api/users/favorites [32m204[0m 0.061 ms - 0[0m
+[REQUEST_DEBUG] GET /api/users/favorites
+[0mGET /api/users/favorites [36m304[0m 102.421 ms - -[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=18
+[0mOPTIONS /api/books?page=1&limit=18 [32m204[0m 0.057 ms - 0[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=18
+[0mGET /api/books?page=1&limit=0 [36m304[0m 152.808 ms - -[0m
+[REQUEST_DEBUG] GET /api/users/favorites
+[0mGET /api/users/favorites [36m304[0m 104.372 ms - -[0m
+[0mGET /api/books?page=1&limit=18 [32m200[0m 154.925 ms - 2115[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=18
+[0mGET /api/books?page=1&limit=18 [36m304[0m 152.530 ms - -[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=20
+[0mOPTIONS /api/books?page=1&limit=20 [32m204[0m 0.113 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.063 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.034 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/analytics
+[0mOPTIONS /api/analytics [32m204[0m 0.030 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.029 ms - 0[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/users [36m304[0m 114.586 ms - -[0m
+[0mGET /api/categories [36m304[0m 114.590 ms - -[0m
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/categories
+[0mGET /api/books?page=1&limit=20 [36m304[0m 218.081 ms - -[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[0mGET /api/analytics [36m304[0m 319.374 ms - -[0m
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/books?page=1&limit=20 [36m304[0m 152.360 ms - -[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[0mGET /api/books?page=1&limit=20 [36m304[0m 153.563 ms - -[0m
+[0mGET /api/users [36m304[0m 446.574 ms - -[0m
+[REQUEST_DEBUG] GET /api/users
+[0mGET /api/analytics [36m304[0m 256.333 ms - -[0m
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/users [36m304[0m 56.946 ms - -[0m
+[0mGET /api/categories [36m304[0m 548.526 ms - -[0m
+[REQUEST_DEBUG] GET /api/categories
+[0mGET /api/categories [36m304[0m 52.587 ms - -[0m
+[0mGET /api/analytics [36m304[0m 267.973 ms - -[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.158 ms - 0[0m
+[REQUEST_DEBUG] POST /api/categories
+[DEBUG] Creando categoría: { name: 'tecnologia', icon: '💻', user: '69e7ede86921a1d768ee5a07' }
+[0mPOST /api/categories [32m201[0m 229.296 ms - 215[0m
+[REQUEST_DEBUG] GET /api/categories
+[0mGET /api/categories [32m200[0m 52.543 ms - 629[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=20
+[0mOPTIONS /api/books?page=1&limit=20 [32m204[0m 0.060 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.029 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/analytics
+[0mOPTIONS /api/analytics [32m204[0m 0.028 ms - 0[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/users [36m304[0m 53.419 ms - -[0m
+[0mGET /api/categories [36m304[0m 53.944 ms - -[0m
+[0mGET /api/books?page=1&limit=20 [36m304[0m 163.384 ms - -[0m
+[0mGET /api/analytics [32m200[0m 357.293 ms - 5011[0m
+[REQUEST_DEBUG] OPTIONS /api/books
+[0mOPTIONS /api/books [32m204[0m 0.048 ms - 0[0m
+[REQUEST_DEBUG] POST /api/books
+[0mPOST /api/books [32m201[0m 1032.896 ms - 597[0m
+[REQUEST_DEBUG] OPTIONS /api/books?page=1&limit=20
+[0mOPTIONS /api/books?page=1&limit=20 [32m204[0m 0.120 ms - 0[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[REQUEST_DEBUG] OPTIONS /api/users
+[0mOPTIONS /api/users [32m204[0m 0.058 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/categories
+[0mOPTIONS /api/categories [32m204[0m 0.038 ms - 0[0m
+[REQUEST_DEBUG] OPTIONS /api/analytics
+[0mOPTIONS /api/analytics [32m204[0m 0.023 ms - 0[0m
+[REQUEST_DEBUG] GET /api/users
+[REQUEST_DEBUG] GET /api/categories
+[REQUEST_DEBUG] GET /api/analytics
+[0mGET /api/users [36m304[0m 60.664 ms - -[0m
+[0mGET /api/categories [36m304[0m 59.610 ms - -[0m
+[0mGET /api/books?page=1&limit=20 [32m200[0m 160.654 ms - 2751[0m
+[REQUEST_DEBUG] GET /api/books?page=1&limit=20
+[0mGET /api/analytics [32m200[0m 258.469 ms - 5388[0m
+[0mGET /api/books?page=1&limit=20 [36m304[0m 151.133 ms - -[0m
