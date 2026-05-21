@@ -18,6 +18,16 @@ const bookSchema = new Schema({
         required: [true, 'La categoría es obligatoria'],
         default: 'Otros'
     },
+    grade: {
+        type: Schema.Types.ObjectId,
+        ref: 'Grade',
+        default: null
+    },
+    level: {
+        type: String,
+        enum: ['BASICO', 'BACHILLERATO', 'GENERAL'],
+        default: 'GENERAL'
+    },
     description: {
         type: String,
         maxLength: [500, 'La descripción no puede tener más de 500 caracteres'],

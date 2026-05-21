@@ -53,8 +53,13 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['ADMIN_ROLE', 'USER_ROLE'],
+        enum: ['ADMIN_ROLE', 'USER_ROLE', 'TEACHER_ROLE'],
         default: 'USER_ROLE'
+    },
+    grade: {
+        type: Schema.Types.ObjectId,
+        ref: 'Grade',
+        default: null
     },
     status: {
         type: Boolean,

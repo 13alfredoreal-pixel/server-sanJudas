@@ -12,8 +12,14 @@ import bookRoutes from '../SRC/books/book.routes.js';
 import categoryRoutes from '../SRC/categories/category.routes.js';
 import reviewRoutes from '../SRC/reviews/review.routes.js';
 import analyticsRoutes from '../SRC/analytics/analytics.routes.js';
+import gradeRoutes from '../SRC/grades/grade.routes.js';
+import courseRoutes from '../SRC/courses/course.routes.js';
+import assignmentRoutes from '../SRC/assignments/assignment.routes.js';
+import announcementRoutes from '../SRC/announcements/announcement.routes.js';
+import scheduleRoutes from '../SRC/schedules/schedule.routes.js';
 import { publicLimiter } from '../middlewares/request-limit.js';
 import { setupAdmin } from '../SRC/users/user.seed.js';
+import { setupGrades } from '../SRC/grades/grade.seed.js';
 import { handleErrors } from '../middlewares/handle-errors.js';
 import { validateJWT } from '../middlewares/jwt-verify.js';
 import { dirname, join } from "path";
@@ -51,12 +57,20 @@ const routes = (app) => {
     app.use('/api/categories', categoryRoutes);
     app.use('/api/reviews', reviewRoutes);
     app.use('/api/analytics', analyticsRoutes);
+
+    // Rutas del sistema académico
+    app.use('/api/grades', gradeRoutes);
+    app.use('/api/courses', courseRoutes);
+    app.use('/api/assignments', assignmentRoutes);
+    app.use('/api/announcements', announcementRoutes);
+    app.use('/api/schedules', scheduleRoutes);
 }
 
 const conectarDB = async () => {
     try {
         await dbConnection();
         await setupAdmin();
+        await setupGrades();
     } catch (error) {
         console.error(`ERROR | Fallo crítico en la base de datos: ${error.message}`)
         throw error;

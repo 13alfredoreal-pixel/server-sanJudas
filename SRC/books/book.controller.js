@@ -19,11 +19,17 @@ const PDF_DIR = join(__dirname, '../../uploads/pdfs')
  */
 export const getBooks = async (req, res) => {
     try {
-        const { category, search, page = 1, limit = 20 } = req.query
+        const { category, search, page = 1, limit = 20, grade, level } = req.query
         let filter = {}
 
         if (category && category !== 'Todos') {
             filter.category = category
+        }
+        if (grade) {
+            filter.grade = grade
+        }
+        if (level && level !== 'GENERAL') {
+            filter.level = level.toUpperCase()
         }
         if (search) {
             filter.$or = [
@@ -40,6 +46,7 @@ export const getBooks = async (req, res) => {
         // Ojo: en la app se manda limit grande para stats
         const query = Book.find(filter)
             .populate('uploadedBy', 'name surname')
+            .populate('grade', 'name level yearNumber')
             .sort({ createdAt: -1 });
 
         if (limitNumber > 0) {
@@ -67,7 +74,7 @@ export const getBooks = async (req, res) => {
  */
 export const getBookById = async (req, res) => {
     try {
-        const book = await Book.findById(req.params.id).populate('uploadedBy', 'name surname')
+        const book = await Book.findById(req.params.id).populate('uploadedBy', 'name surname').populate('grade', 'name level yearNumber')
         if (!book) {
             return res.status(404).json({ message: 'Libro no encontrado' })
         }
@@ -83,7 +90,7 @@ export const getBookById = async (req, res) => {
  */
 export const uploadBook = async (req, res) => {
     try {
-        const { title, author, category, description } = req.body
+        const { title, author, category, description, grade: gradeId, level: bookLevel } = req.body
 
         // Limpieza y validación de campos obligatorios
         const cleanTitle = (title || "").trim()
@@ -158,17 +165,22 @@ export const uploadBook = async (req, res) => {
             coverPublicId = coverResult.public_id
         }
 
-        const book = await Book.create({
+        const bookData = {
             title: cleanTitle,
             author: cleanAuthor,
             category: (category && category.trim() !== '') ? category : 'Otros',
             description: description || '',
             pdfUrl,
-            pdfPublicId: pdfFilename, // Guardamos el nombre del archivo local
+            pdfPublicId: pdfFilename,
             coverUrl,
             coverPublicId,
-            uploadedBy: req.uid || req.user?._id // Robustez en el ID del admin
-        })
+            uploadedBy: req.uid || req.user?._id
+        }
+
+        if (gradeId) bookData.grade = gradeId
+        if (bookLevel) bookData.level = bookLevel.toUpperCase()
+
+        const book = await Book.create(bookData)
 
         // Audit Log
         await logAdminAction(req.uid || req.user?._id, 'CREATE_BOOK', `Libro subido: ${cleanTitle} (${pdfFilename})`, req.ip);
