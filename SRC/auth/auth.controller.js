@@ -43,11 +43,10 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 días
     });
 
-    // Retornamos éxito, el ID del usuario y el token (Máxima seguridad)
+    // Retornamos éxito y el ID del usuario (el token está en la cookie)
     return res.status(200).json({
       message: "Usuario registrado correctamente",
-      uid: newUser.id,
-      token
+      uid: newUser.id
     });
   } catch (error) {
     return res.status(500).json({
