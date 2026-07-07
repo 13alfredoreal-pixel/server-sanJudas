@@ -129,7 +129,9 @@ export const uploadBook = async (req, res) => {
                     folder: 'biblioteca/pdfs',
                     resource_type: 'raw',
                     public_id: pdfFilename,
-                    format: 'pdf'
+                    format: 'pdf',
+                    type: 'upload',
+                    access_mode: 'public'
                 },
                 (err, result) => err ? reject(err) : resolve(result)
             )
