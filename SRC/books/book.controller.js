@@ -305,7 +305,8 @@ export const getPdfSignedUrl = async (req, res) => {
             format: 'pdf',
             sign_url: true,
             expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hora
-            type: 'upload'
+            type: 'upload',
+            unsigned: true
         })
 
         console.log('[PDF Signed URL] Generated signed URL successfully')
