@@ -228,20 +228,31 @@ export const deleteBook = async (req, res) => {
  */
 export const servePdf = async (req, res) => {
     try {
+        console.log('[PDF Proxy] Serving PDF for book ID:', req.params.id)
+        
         const book = await Book.findById(req.params.id)
         if (!book) {
+            console.log('[PDF Proxy] Book not found:', req.params.id)
             return res.status(404).json({ message: 'Libro no encontrado' })
         }
 
         if (!book.pdfUrl) {
+            console.log('[PDF Proxy] Book has no PDF URL:', req.params.id)
             return res.status(404).json({ message: 'Este libro no tiene PDF' })
         }
+
+        console.log('[PDF Proxy] Downloading PDF from Cloudinary:', book.pdfUrl)
 
         // Descargar el PDF de Cloudinary usando axios
         const response = await axios.get(book.pdfUrl, {
             responseType: 'arraybuffer',
-            timeout: 30000
+            timeout: 30000,
+            headers: {
+                'Accept': 'application/pdf'
+            }
         })
+
+        console.log('[PDF Proxy] PDF downloaded successfully, size:', response.data.length)
 
         // Configurar headers para servir el PDF
         res.setHeader('Content-Type', 'application/pdf')
@@ -251,7 +262,17 @@ export const servePdf = async (req, res) => {
         // Enviar el PDF al cliente
         res.send(response.data)
     } catch (error) {
-        console.error('[PDF Proxy Error]', error)
+        console.error('[PDF Proxy Error]', error.message)
+        console.error('[PDF Proxy Error Details]', error.response?.data || error)
+        
+        if (error.code === 'ECONNABORTED') {
+            return res.status(504).json({ message: 'Timeout al descargar el PDF de Cloudinary' })
+        }
+        
+        if (error.response?.status === 401) {
+            return res.status(500).json({ message: 'Error de autenticación con Cloudinary (401)' })
+        }
+        
         return res.status(500).json({ message: 'Error al obtener el PDF', error: error.message })
     }
 }
