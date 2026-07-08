@@ -299,15 +299,8 @@ export const getPdfSignedUrl = async (req, res) => {
             return res.status(404).json({ message: 'Este libro no tiene PDF' })
         }
 
-        // Generar URL firmada con expiración de 1 hora
-        const signedUrl = cloudinary.url(book.pdfPublicId, {
-            resource_type: 'raw',
-            format: 'pdf',
-            sign_url: true,
-            expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hora
-            type: 'upload',
-            unsigned: true
-        })
+        // Devolver la URL existente del libro (los nuevos se suben con unsigned: true)
+        const signedUrl = book.pdfUrl
 
         console.log('[PDF Signed URL] Generated signed URL successfully')
 
