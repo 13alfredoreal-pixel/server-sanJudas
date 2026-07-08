@@ -259,11 +259,21 @@ export const servePdf = async (req, res) => {
         res.setHeader('Content-Disposition', `inline; filename="${book.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`)
         res.setHeader('Cache-Control', 'public, max-age=3600')
 
-        // Enviar el PDF al cliente
-        res.send(response.data)
-    } catch (error) {
+            } catch (error) {
         console.error('[PDF Proxy Error]', error.message)
-        console.error('[PDF Proxy Error Details]', error.response?.data || error)
+        
+        // Convertir Buffer a string si existe
+        let errorDetails = error
+        if (error.response?.data) {
+            if (Buffer.isBuffer(error.response.data)) {
+                errorDetails = error.response.data.toString('utf-8')
+            } else {
+                errorDetails = JSON.stringify(error.response.data)
+            }
+        }
+        
+        console.error('[PDF Proxy Error Details]', errorDetails)
+        console.error('[PDF Proxy Error Status]', error.response?.status)
         
         if (error.code === 'ECONNABORTED') {
             return res.status(504).json({ message: 'Timeout al descargar el PDF de Cloudinary' })
