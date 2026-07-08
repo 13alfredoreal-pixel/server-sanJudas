@@ -222,9 +222,8 @@ export const deleteBook = async (req, res) => {
     }
 }
 /**
- * Sirve un PDF como proxy desde Cloudinary
- * Esta función descarga el PDF de Cloudinary usando las credenciales del servidor
- * y lo sirve al cliente, evitando el error 401 de Cloudinary
+ * Sirve un PDF como proxy desde Cloudinary usando streaming
+ * Esta función transmite el PDF directamente sin cargarlo en memoria
  */
 export const servePdf = async (req, res) => {
     try {
@@ -241,42 +240,36 @@ export const servePdf = async (req, res) => {
             return res.status(404).json({ message: 'Este libro no tiene PDF' })
         }
 
-        console.log('[PDF Proxy] Downloading PDF from Cloudinary:', book.pdfUrl)
-
-        // Descargar el PDF de Cloudinary usando axios
-        const response = await axios.get(book.pdfUrl, {
-            responseType: 'arraybuffer',
-            timeout: 30000,
-            headers: {
-                'Accept': 'application/pdf'
-            }
-        })
-
-        console.log('[PDF Proxy] PDF downloaded successfully, size:', response.data.length)
+        console.log('[PDF Proxy] Streaming PDF from Cloudinary:', book.pdfUrl)
 
         // Configurar headers para servir el PDF
         res.setHeader('Content-Type', 'application/pdf')
         res.setHeader('Content-Disposition', `inline; filename="${book.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`)
         res.setHeader('Cache-Control', 'public, max-age=3600')
 
-            } catch (error) {
+        // Usar streaming para descargar y transmitir el PDF
+        const response = await axios.get(book.pdfUrl, {
+            responseType: 'stream',
+            timeout: 30000
+        })
+
+        console.log('[PDF Proxy] Streaming started')
+
+        // Transmitir el stream directamente al cliente
+        response.data.pipe(res)
+
+        response.data.on('error', (error) => {
+            console.error('[PDF Proxy Stream Error]', error)
+            if (!res.headersSent) {
+                res.status(500).json({ message: 'Error al transmitir el PDF', error: error.message })
+            }
+        })
+
+    } catch (error) {
         console.error('[PDF Proxy Error]', error.message)
         
-        // Convertir Buffer a string si existe
-        let errorDetails = error
-        if (error.response?.data) {
-            if (Buffer.isBuffer(error.response.data)) {
-                errorDetails = error.response.data.toString('utf-8')
-            } else {
-                errorDetails = JSON.stringify(error.response.data)
-            }
-        }
-        
-        console.error('[PDF Proxy Error Details]', errorDetails)
-        console.error('[PDF Proxy Error Status]', error.response?.status)
-        
         if (error.code === 'ECONNABORTED') {
-            return res.status(504).json({ message: 'Timeout al descargar el PDF de Cloudinary' })
+            return res.status(504).json({ message: 'Timeout al conectar con Cloudinary' })
         }
         
         if (error.response?.status === 401) {
