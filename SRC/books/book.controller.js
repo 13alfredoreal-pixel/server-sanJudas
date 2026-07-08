@@ -132,7 +132,8 @@ export const uploadBook = async (req, res) => {
                     public_id: pdfFilename,
                     format: 'pdf',
                     type: 'upload',
-                    access_mode: 'public'
+                    access_mode: 'public',
+                    unsigned: true
                 },
                 (err, result) => err ? reject(err) : resolve(result)
             )
