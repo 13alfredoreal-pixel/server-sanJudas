@@ -63,6 +63,6 @@ router.delete(
  * Destino: servePdf (book.controller.js)
  * Retorno: Stream del PDF
  */
-router.get('/:id/pdf', validateJWT, authenticatedLimiter, servePdf) 
+router.get('/:id/pdf', servePdf)
 
 export default router
