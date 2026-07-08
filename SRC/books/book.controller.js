@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import { fileTypeFromBuffer } from 'file-type'
 import { logAdminAction } from '../audit/audit.logger.js'
+import axios from 'axios'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -218,5 +219,39 @@ export const deleteBook = async (req, res) => {
         return res.status(200).json({ message: 'Libro eliminado correctamente' })
     } catch (error) {
         return res.status(500).json({ message: 'Error al eliminar el libro', error: error.message })
+    }
+}
+/**
+ * Sirve un PDF como proxy desde Cloudinary
+ * Esta función descarga el PDF de Cloudinary usando las credenciales del servidor
+ * y lo sirve al cliente, evitando el error 401 de Cloudinary
+ */
+export const servePdf = async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id)
+        if (!book) {
+            return res.status(404).json({ message: 'Libro no encontrado' })
+        }
+
+        if (!book.pdfUrl) {
+            return res.status(404).json({ message: 'Este libro no tiene PDF' })
+        }
+
+        // Descargar el PDF de Cloudinary usando axios
+        const response = await axios.get(book.pdfUrl, {
+            responseType: 'arraybuffer',
+            timeout: 30000
+        })
+
+        // Configurar headers para servir el PDF
+        res.setHeader('Content-Type', 'application/pdf')
+        res.setHeader('Content-Disposition', `inline; filename="${book.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`)
+        res.setHeader('Cache-Control', 'public, max-age=3600')
+
+        // Enviar el PDF al cliente
+        res.send(response.data)
+    } catch (error) {
+        console.error('[PDF Proxy Error]', error)
+        return res.status(500).json({ message: 'Error al obtener el PDF', error: error.message })
     }
 }

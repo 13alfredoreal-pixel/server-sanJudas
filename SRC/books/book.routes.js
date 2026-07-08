@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { validateJWT } from '../../middlewares/jwt-verify.js'
 import { isAdmin } from '../../middlewares/is-admin.js'
 import { getBooks, getBookById, uploadBook, deleteBook } from './book.controller.js'
+import { servePdf } from './book.controller.js'
 import { authenticatedLimiter } from '../../middlewares/request-limit.js'
 import { uploadBookFiles } from '../../middlewares/book-multer.js'
 
@@ -55,5 +56,13 @@ router.delete(
     isAdmin,
     deleteBook
 )
+
+/**
+ * RUTA: GET /:id/pdf
+ * Función: Sirve un PDF como proxy desde Cloudinary
+ * Destino: servePdf (book.controller.js)
+ * Retorno: Stream del PDF
+ */
+router.get('/:id/pdf', validateJWT, authenticatedLimiter, servePdf) 
 
 export default router
