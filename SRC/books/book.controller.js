@@ -279,3 +279,39 @@ export const servePdf = async (req, res) => {
         return res.status(500).json({ message: 'Error al obtener el PDF', error: error.message })
     }
 }
+
+/**
+ * Genera una URL firmada de Cloudinary para acceso temporal al PDF
+ */
+export const getPdfSignedUrl = async (req, res) => {
+    try {
+        console.log('[PDF Signed URL] Generating signed URL for book ID:', req.params.id)
+        
+        const book = await Book.findById(req.params.id)
+        if (!book) {
+            console.log('[PDF Signed URL] Book not found:', req.params.id)
+            return res.status(404).json({ message: 'Libro no encontrado' })
+        }
+
+        if (!book.pdfUrl) {
+            console.log('[PDF Signed URL] Book has no PDF URL:', req.params.id)
+            return res.status(404).json({ message: 'Este libro no tiene PDF' })
+        }
+
+        // Generar URL firmada con expiración de 1 hora
+        const signedUrl = cloudinary.url(book.pdfPublicId, {
+            resource_type: 'raw',
+            format: 'pdf',
+            sign_url: true,
+            expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hora
+            type: 'upload'
+        })
+
+        console.log('[PDF Signed URL] Generated signed URL successfully')
+
+        return res.status(200).json({ signedUrl })
+    } catch (error) {
+        console.error('[PDF Signed URL Error]', error.message)
+        return res.status(500).json({ message: 'Error al generar URL firmada', error: error.message })
+    }
+}

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { validateJWT } from '../../middlewares/jwt-verify.js'
 import { isAdmin } from '../../middlewares/is-admin.js'
-import { getBooks, getBookById, uploadBook, deleteBook } from './book.controller.js'
+import { getBooks, getBookById, uploadBook, deleteBook, getPdfSignedUrl } from './book.controller.js'
 import { servePdf } from './book.controller.js'
 import { authenticatedLimiter } from '../../middlewares/request-limit.js'
 import { uploadBookFiles } from '../../middlewares/book-multer.js'
@@ -64,5 +64,13 @@ router.delete(
  * Retorno: Stream del PDF
  */
 router.get('/:id/pdf', servePdf)
+
+/**
+ * RUTA: GET /:id/signed-url
+ * Función: Genera una URL firmada de Cloudinary para acceso temporal al PDF
+ * Destino: getPdfSignedUrl (book.controller.js)
+ * Retorno: JSON con la URL firmada
+ */
+router.get('/:id/signed-url', validateJWT, authenticatedLimiter, getPdfSignedUrl)
 
 export default router
