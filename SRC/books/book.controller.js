@@ -1,5 +1,6 @@
 import Book from './book.model.js'
 import cloudinary from '../../configs/cloudinary.js'
+import { bucket } from '../../configs/firebase.js'
 import { writeFile, unlink, mkdir } from 'fs/promises'
 import { join, basename } from 'path'
 import { fileURLToPath } from 'url'
@@ -119,27 +120,23 @@ export const uploadBook = async (req, res) => {
             }
         }
 
-        // Subir PDF a Cloudinary
+        // Subir PDF a Firebase Storage
         const timestamp = Date.now()
         const safeName = cleanTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-        const pdfFilename = `${safeName}_${timestamp}.pdf`
+        const pdfFilename = `biblioteca/pdfs/${safeName}_${timestamp}.pdf`
 
-        const pdfResult = await new Promise((resolve, reject) => {
-            const stream = cloudinary.uploader.upload_stream(
-                {
-                    folder: 'biblioteca/pdfs',
-                    resource_type: 'raw',
-                    public_id: pdfFilename,
-                    format: 'pdf',
-                    type: 'upload',
-                    access_mode: 'public'
-                },
-                (err, result) => err ? reject(err) : resolve(result)
-            )
-            stream.end(pdfFile.buffer)
+        const pdfFileBuffer = pdfFile.buffer
+        const pdfFileUpload = bucket.file(pdfFilename)
+
+        await pdfFileUpload.save(pdfFileBuffer, {
+            contentType: 'application/pdf',
+            public: true,
+            metadata: {
+                contentType: 'application/pdf'
+            }
         })
 
-        const pdfUrl = pdfResult.secure_url
+        const pdfUrl = `https://storage.googleapis.com/${bucket.name}/${pdfFilename}`
 
         let coverUrl = ''
         let coverPublicId = ''
@@ -166,7 +163,7 @@ export const uploadBook = async (req, res) => {
             category: (category && category.trim() !== '') ? category : 'Otros',
             description: description || '',
             pdfUrl,
-            pdfPublicId: pdfResult.public_id,
+            pdfPublicId: pdfFilename,
             coverUrl,
             coverPublicId,
             uploadedBy: req.uid || req.user?._id
@@ -194,16 +191,16 @@ export const deleteBook = async (req, res) => {
             return res.status(404).json({ message: 'Libro no encontrado' })
         }
 
-        // Eliminar PDF de Cloudinary
+        // Eliminar PDF de Firebase Storage
         if (book.pdfPublicId) {
             try {
-                await cloudinary.uploader.destroy(book.pdfPublicId, { resource_type: 'raw' })
+                await bucket.file(book.pdfPublicId).delete()
             } catch (e) {
-                console.log(`[Delete] Could not delete PDF from Cloudinary: ${e.message}`)
+                console.log(`[Delete] Could not delete PDF from Firebase Storage: ${e.message}`)
             }
         }
 
-        // Eliminar portada de Cloudinary
+        // Eliminar portada de Cloudinary (mantener Cloudinary para portadas)
         if (book.coverPublicId) {
             try {
                 await cloudinary.uploader.destroy(book.coverPublicId, { resource_type: 'image' })
@@ -298,7 +295,7 @@ export const getPdfSignedUrl = async (req, res) => {
             return res.status(404).json({ message: 'Este libro no tiene PDF' })
         }
 
-        // Usar la URL directa del libro (ya guardada en la base de datos)
+        // Usar la URL directa del libro (Firebase Storage URL pública)
         const signedUrl = book.pdfUrl
 
         console.log('[PDF Signed URL] Generated signed URL successfully')
