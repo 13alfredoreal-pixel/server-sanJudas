@@ -1,6 +1,6 @@
 import Book from './book.model.js'
 import cloudinary from '../../configs/cloudinary.js'
-import { bucket } from '../../configs/firebase.js'
+import { b2, B2_BUCKET_ID, B2_BUCKET_NAME } from '../../configs/backblaze.js'
 import { writeFile, unlink, mkdir } from 'fs/promises'
 import { join, basename } from 'path'
 import { fileURLToPath } from 'url'
@@ -120,23 +120,27 @@ export const uploadBook = async (req, res) => {
             }
         }
 
-        // Subir PDF a Firebase Storage
+        // Subir PDF a Backblaze B2
         const timestamp = Date.now()
         const safeName = cleanTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-        const pdfFilename = `biblioteca/pdfs/${safeName}_${timestamp}.pdf`
+        const pdfFilename = `${safeName}_${timestamp}.pdf`
 
-        const pdfFileBuffer = pdfFile.buffer
-        const pdfFileUpload = bucket.file(pdfFilename)
-
-        await pdfFileUpload.save(pdfFileBuffer, {
-            contentType: 'application/pdf',
-            public: true,
-            metadata: {
-                contentType: 'application/pdf'
-            }
+        // Autorizar y subir archivo a Backblaze B2
+        await b2.authorize()
+        
+        const uploadUrlResponse = await b2.getUploadUrl({
+            bucketId: B2_BUCKET_ID
+        })
+        
+        const uploadResponse = await b2.uploadFile({
+            uploadUrl: uploadUrlResponse.data.uploadUrl,
+            uploadAuthToken: uploadUrlResponse.data.authorizationToken,
+            fileName: pdfFilename,
+            fileData: pdfFile.buffer,
+            contentType: 'application/pdf'
         })
 
-        const pdfUrl = `https://storage.googleapis.com/${bucket.name}/${pdfFilename}`
+        const pdfUrl = uploadResponse.data.fileId
 
         let coverUrl = ''
         let coverPublicId = ''
@@ -191,12 +195,16 @@ export const deleteBook = async (req, res) => {
             return res.status(404).json({ message: 'Libro no encontrado' })
         }
 
-        // Eliminar PDF de Firebase Storage
+        // Eliminar PDF de Backblaze B2
         if (book.pdfPublicId) {
             try {
-                await bucket.file(book.pdfPublicId).delete()
+                await b2.authorize()
+                await b2.deleteFileVersion({
+                    fileId: book.pdfUrl,
+                    fileName: book.pdfPublicId
+                })
             } catch (e) {
-                console.log(`[Delete] Could not delete PDF from Firebase Storage: ${e.message}`)
+                console.log(`[Delete] Could not delete PDF from Backblaze B2: ${e.message}`)
             }
         }
 
@@ -295,8 +303,11 @@ export const getPdfSignedUrl = async (req, res) => {
             return res.status(404).json({ message: 'Este libro no tiene PDF' })
         }
 
-        // Usar la URL directa del libro (Firebase Storage URL pública)
-        const signedUrl = book.pdfUrl
+        // Generar URL firmada temporal para Backblaze B2
+        await b2.authorize()
+        const authResponse = await b2.authorize()
+        const downloadUrl = authResponse.data.downloadUrl
+        const signedUrl = `${downloadUrl}/file/${B2_BUCKET_NAME}/${book.pdfPublicId}`
 
         console.log('[PDF Signed URL] Generated signed URL successfully')
 
