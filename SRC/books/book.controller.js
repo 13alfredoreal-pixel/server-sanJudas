@@ -301,7 +301,6 @@ export const getPdfSignedUrl = async (req, res) => {
         // Generar URL firmada con expiración de 1 hora
         const signedUrl = cloudinary.url(book.pdfPublicId, {
             resource_type: 'raw',
-            format: 'pdf',
             sign_url: true,
             expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hora
             type: 'upload'
