@@ -124,24 +124,27 @@ export const uploadBook = async (req, res) => {
         const safeName = cleanTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()
         const pdfFilename = `biblioteca/pdfs/${safeName}_${timestamp}`
 
-        const pdfResult = await new Promise((resolve, reject) => {
-            const stream = cloudinary.uploader.upload_stream(
-                {
-                    folder: 'biblioteca/pdfs',
-                    resource_type: 'raw',
-                    public_id: `${safeName}_${timestamp}`,
-                    format: 'pdf',
-                    use_filename: true,
-                    unique_filename: true,
-                    type: 'upload'
-                },
-                (error, result) => {
-                    if (error) reject(error)
-                    else resolve(result)
-                }
-            )
-            stream.end(pdfFile.buffer)
-        })
+       const pdfResult = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+        {
+            folder: 'biblioteca/pdfs',
+            resource_type: 'raw',
+            public_id: `${safeName}_${timestamp}`,
+            format: 'pdf',
+            use_filename: true,
+            unique_filename: true,
+            type: 'upload',
+            access_mode: 'public',
+            overwrite: true,
+            invalidate: true
+        },
+        (error, result) => {
+            if (error) reject(error)
+            else resolve(result)
+        }
+    )
+    stream.end(pdfFile.buffer)
+})
 
         const pdfUrl = pdfResult.secure_url
 
