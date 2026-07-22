@@ -3,16 +3,31 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const b2 = new B2({
-  applicationKeyId: process.env.B2_KEY_ID,
-  applicationKey: process.env.B2_APPLICATION_KEY
-});
+let b2 = null;
+let B2_BUCKET_ID = null;
+let B2_BUCKET_NAME = null;
 
-const B2_BUCKET_ID = process.env.B2_BUCKET_ID;
-const B2_BUCKET_NAME = process.env.B2_BUCKET_NAME;
+try {
+  if (process.env.B2_KEY_ID && process.env.B2_APPLICATION_KEY) {
+    b2 = new B2({
+      applicationKeyId: process.env.B2_KEY_ID,
+      applicationKey: process.env.B2_APPLICATION_KEY
+    });
+    B2_BUCKET_ID = process.env.B2_BUCKET_ID;
+    B2_BUCKET_NAME = process.env.B2_BUCKET_NAME;
+    console.log('[Backblaze B2] Initialized successfully');
+  } else {
+    console.warn('[Backblaze B2] Missing credentials, PDF upload will be disabled');
+  }
+} catch (error) {
+  console.error('[Backblaze B2] Initialization error:', error.message);
+}
 
 // Función para obtener URL firmada temporal
 export const getSignedUrl = async (fileName, expiresIn = 3600) => {
+  if (!b2) {
+    throw new Error('Backblaze B2 not initialized');
+  }
   try {
     const authResponse = await b2.authorize();
     const downloadUrl = authResponse.data.downloadUrl;
