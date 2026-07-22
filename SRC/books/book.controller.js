@@ -1,6 +1,5 @@
 import Book from './book.model.js'
 import cloudinary from '../../configs/cloudinary.js'
-import { b2, B2_BUCKET_ID, B2_BUCKET_NAME } from '../../configs/backblaze.js'
 import { writeFile, unlink, mkdir } from 'fs/promises'
 import { join, basename } from 'path'
 import { fileURLToPath } from 'url'
@@ -120,27 +119,31 @@ export const uploadBook = async (req, res) => {
             }
         }
 
-        // Subir PDF a Backblaze B2
+        // Subir PDF a Cloudinary
         const timestamp = Date.now()
         const safeName = cleanTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()
-        const pdfFilename = `${safeName}_${timestamp}.pdf`
+        const pdfFilename = `biblioteca/pdfs/${safeName}_${timestamp}`
 
-        // Autorizar y subir archivo a Backblaze B2
-        await b2.authorize()
-        
-        const uploadUrlResponse = await b2.getUploadUrl({
-            bucketId: B2_BUCKET_ID
-        })
-        
-        const uploadResponse = await b2.uploadFile({
-            uploadUrl: uploadUrlResponse.data.uploadUrl,
-            uploadAuthToken: uploadUrlResponse.data.authorizationToken,
-            fileName: pdfFilename,
-            fileData: pdfFile.buffer,
-            contentType: 'application/pdf'
+        const pdfResult = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                {
+                    folder: 'biblioteca/pdfs',
+                    resource_type: 'raw',
+                    public_id: `${safeName}_${timestamp}`,
+                    format: 'pdf',
+                    use_filename: true,
+                    unique_filename: true,
+                    type: 'upload'
+                },
+                (error, result) => {
+                    if (error) reject(error)
+                    else resolve(result)
+                }
+            )
+            stream.end(pdfFile.buffer)
         })
 
-        const pdfUrl = uploadResponse.data.fileId
+        const pdfUrl = pdfResult.secure_url
 
         let coverUrl = ''
         let coverPublicId = ''
@@ -167,7 +170,7 @@ export const uploadBook = async (req, res) => {
             category: (category && category.trim() !== '') ? category : 'Otros',
             description: description || '',
             pdfUrl,
-            pdfPublicId: pdfFilename,
+            pdfPublicId: pdfResult.public_id,
             coverUrl,
             coverPublicId,
             uploadedBy: req.uid || req.user?._id
@@ -195,20 +198,16 @@ export const deleteBook = async (req, res) => {
             return res.status(404).json({ message: 'Libro no encontrado' })
         }
 
-        // Eliminar PDF de Backblaze B2
+        // Eliminar PDF de Cloudinary
         if (book.pdfPublicId) {
             try {
-                await b2.authorize()
-                await b2.deleteFileVersion({
-                    fileId: book.pdfUrl,
-                    fileName: book.pdfPublicId
-                })
+                await cloudinary.uploader.destroy(book.pdfPublicId, { resource_type: 'raw' })
             } catch (e) {
-                console.log(`[Delete] Could not delete PDF from Backblaze B2: ${e.message}`)
+                console.log(`[Delete] Could not delete PDF from Cloudinary: ${e.message}`)
             }
         }
 
-        // Eliminar portada de Cloudinary (mantener Cloudinary para portadas)
+        // Eliminar portada de Cloudinary
         if (book.coverPublicId) {
             try {
                 await cloudinary.uploader.destroy(book.coverPublicId, { resource_type: 'image' })
@@ -303,11 +302,14 @@ export const getPdfSignedUrl = async (req, res) => {
             return res.status(404).json({ message: 'Este libro no tiene PDF' })
         }
 
-        // Generar URL firmada temporal para Backblaze B2
-        await b2.authorize()
-        const authResponse = await b2.authorize()
-        const downloadUrl = authResponse.data.downloadUrl
-        const signedUrl = `${downloadUrl}/file/${B2_BUCKET_NAME}/${book.pdfPublicId}`
+        // Generar URL firmada temporal para Cloudinary
+        const signedUrl = cloudinary.url(book.pdfPublicId, {
+            resource_type: 'raw',
+            format: 'pdf',
+            sign_url: true,
+            expires_at: Math.floor(Date.now() / 1000) + 3600,
+            type: 'upload'
+        })
 
         console.log('[PDF Signed URL] Generated signed URL successfully')
 
