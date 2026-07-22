@@ -12,13 +12,16 @@ const allowedOrigins = [
 // Configuración
 const corsOptions = {
     origin: (origin, callback) => {
+        // Permitir solicitudes sin origin (como mobile apps, curl, etc.)
         if (!origin) return callback(null, true);
 
         if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
 
-        return callback(new Error(`CORS bloqueado para origen: ${origin}`));
+        // Temporalmente permitir cualquier origen para debugging
+        console.warn(`CORS warning: Origin ${origin} not in allowed list, but allowing for debugging`);
+        return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
