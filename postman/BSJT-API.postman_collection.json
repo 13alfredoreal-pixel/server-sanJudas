@@ -6,18 +6,48 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000/api" },
-    { "key": "accessToken", "value": "" },
-    { "key": "bookId", "value": "" },
-    { "key": "categoryId", "value": "" },
-    { "key": "reviewId", "value": "" },
-    { "key": "userId", "value": "" },
-    { "key": "adminUsername", "value": "admin" },
-    { "key": "adminPassword", "value": "" },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "bookId",
+      "value": ""
+    },
+    {
+      "key": "categoryId",
+      "value": ""
+    },
+    {
+      "key": "reviewId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "adminUsername",
+      "value": "admin"
+    },
+    {
+      "key": "adminPassword",
+      "value": ""
+    }
   ],
   "auth": {
     "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
@@ -40,19 +70,50 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "formdata",
               "formdata": [
-                { "key": "name", "value": "Usuario", "type": "text" },
-                { "key": "surname", "value": "Prueba", "type": "text" },
-                { "key": "username", "value": "user_test_{{$timestamp}}", "type": "text" },
-                { "key": "email", "value": "user_test_{{$timestamp}}@example.com", "type": "text" },
-                { "key": "password", "value": "Test1234!", "type": "text" },
-                { "key": "confirmPassword", "value": "Test1234!", "type": "text" },
-                { "key": "profilePicture", "type": "file", "src": [], "description": "Opcional — imagen jpeg/png/webp" }
+                {
+                  "key": "name",
+                  "value": "Usuario",
+                  "type": "text"
+                },
+                {
+                  "key": "surname",
+                  "value": "Prueba",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "user_test_{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "user_test_{{$timestamp}}@example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "Test1234!",
+                  "type": "text"
+                },
+                {
+                  "key": "confirmPassword",
+                  "value": "Test1234!",
+                  "type": "text"
+                },
+                {
+                  "key": "profilePicture",
+                  "type": "file",
+                  "src": [],
+                  "description": "Opcional — imagen jpeg/png/webp"
+                }
               ]
             },
             "url": "{{baseUrl}}/auth/register",
@@ -79,9 +140,16 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"{{adminUsername}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
@@ -108,9 +176,16 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"admin@sanjudas.edu.gt\",\n  \"password\": \"{{adminPassword}}\"\n}"
@@ -137,7 +212,9 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [],
             "url": "{{baseUrl}}/auth/refresh-token",
@@ -147,7 +224,9 @@
         {
           "name": "Logout",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [],
             "url": "{{baseUrl}}/auth/logout",
@@ -198,11 +277,32 @@
             "body": {
               "mode": "formdata",
               "formdata": [
-                { "key": "name", "value": "Administrador", "type": "text" },
-                { "key": "surname", "value": "Principal", "type": "text" },
-                { "key": "bio", "value": "Prueba Postman", "type": "text" },
-                { "key": "phone", "value": "5495-7813", "type": "text" },
-                { "key": "profilePicture", "type": "file", "src": [], "description": "Opcional" }
+                {
+                  "key": "name",
+                  "value": "Administrador",
+                  "type": "text"
+                },
+                {
+                  "key": "surname",
+                  "value": "Principal",
+                  "type": "text"
+                },
+                {
+                  "key": "bio",
+                  "value": "Prueba Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "5495-7813",
+                  "type": "text"
+                },
+                {
+                  "key": "profilePicture",
+                  "type": "file",
+                  "src": [],
+                  "description": "Opcional"
+                }
               ]
             },
             "url": "{{baseUrl}}/users/update"
@@ -212,7 +312,12 @@
           "name": "Update password",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"oldPassword\": \"{{adminPassword}}\",\n  \"newPassword\": \"{{adminPassword}}\"\n}"
@@ -249,7 +354,12 @@
           "name": "Update reading progress",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"page\": 3\n}"
@@ -290,13 +400,31 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/books?page=1&limit=10&search=&category=",
-              "host": ["{{baseUrl}}"],
-              "path": ["books"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" },
-                { "key": "search", "value": "", "description": "título o autor" },
-                { "key": "category", "value": "", "description": "Nombre categoría o Todos" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "título o autor"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "description": "Nombre categoría o Todos"
+                }
               ]
             }
           }
@@ -331,12 +459,38 @@
             "body": {
               "mode": "formdata",
               "formdata": [
-                { "key": "title", "value": "Libro Postman {{$timestamp}}", "type": "text" },
-                { "key": "author", "value": "Autor Prueba", "type": "text" },
-                { "key": "category", "value": "arte", "type": "text" },
-                { "key": "description", "value": "Subida de prueba BSJT", "type": "text" },
-                { "key": "pdf", "type": "file", "src": [], "description": "Obligatorio — PDF (va a Supabase)" },
-                { "key": "cover", "type": "file", "src": [], "description": "Opcional — imagen (Cloudinary)" }
+                {
+                  "key": "title",
+                  "value": "Libro Postman {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "author",
+                  "value": "Autor Prueba",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "arte",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Subida de prueba BSJT",
+                  "type": "text"
+                },
+                {
+                  "key": "pdf",
+                  "type": "file",
+                  "src": [],
+                  "description": "Obligatorio — PDF (va a Supabase)"
+                },
+                {
+                  "key": "cover",
+                  "type": "file",
+                  "src": [],
+                  "description": "Opcional — imagen (Cloudinary)"
+                }
               ]
             },
             "url": "{{baseUrl}}/books",
@@ -411,7 +565,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"categoria-postman-{{$timestamp}}\",\n  \"icon\": \"📚\"\n}"
@@ -448,7 +607,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"rating\": 5,\n  \"comment\": \"Excelente recurso (Postman)\"\n}"
@@ -494,7 +658,9 @@
         {
           "name": "Protected without token → 401",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
             "header": [],
             "url": "{{baseUrl}}/books"
@@ -503,7 +669,9 @@
         {
           "name": "Legacy static /pdfs → 404",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
             "header": [],
             "url": "{{baseUrl}}/pdfs/"
@@ -512,7 +680,9 @@
         {
           "name": "Legacy static /uploads → 404",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
             "header": [],
             "url": "{{baseUrl}}/uploads/"
