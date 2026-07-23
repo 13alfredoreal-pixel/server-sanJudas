@@ -1,0 +1,35 @@
+---
+description: Convenciones globales BSJT server — workflow, npm, dominio biblioteca
+alwaysApply: true
+---
+
+# BSJT Server — Reglas del proyecto
+
+## Workflow
+
+- Issue obligatorio: título `[BSJT-XXX] Descripción` en este repo.
+- Rama = **solo** el ID: `BSJT-012` (sin `feature/`, sin sufijo).
+- PR con `Closes #N` antes de merge.
+- Si el cambio rompe el client: actualizar `docs/API-CONTRACT.md` y abrir PR hermano enlazado.
+
+## Stack
+
+- **npm** exclusivamente (no pnpm ni yarn).
+- Express 5 ESM; módulos en `SRC/<domain>/`.
+- No asumir monorepo ni `@shared`.
+
+## Dominio
+
+- Roles: `USER_ROLE` | `ADMIN_ROLE`.
+- PDFs/portadas en **Cloudinary** (`pdfUrl`/`pdfPublicId`, `coverUrl`/`coverPublicId`).
+- Auth: JWT Bearer + refresh cookie HttpOnly; passwords Argon2.
+- CORS allowlist: localhost:5173 + `biblioteca-sjt.web.app`.
+
+## Estilo
+
+- Preferir cambios acotados; refactor amplio solo si el usuario lo pide.
+- En refactor: preservar invariantes de `docs/CURRENT-STATE.md` y actualizar `docs/API-CONTRACT.md` si cambia el contrato.
+- Sin secretos en el diff; usar `.env.example`.
+- Docs en español; código en inglés.
+- `docs/ROADMAP.md` es stub hasta nueva redacción — no usarlo como guía.
+- Ver `AGENTS.md`, `docs/API-CONTRACT.md`, `docs/CURRENT-STATE.md`.

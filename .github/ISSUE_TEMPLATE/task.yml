@@ -1,0 +1,38 @@
+name: Task
+description: Tarea técnica, documentación o infraestructura (API)
+title: "[BSJT-???] "
+labels:
+  - task
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Nomenclatura:** título `[BSJT-XXX] Descripción`. Ver docs/GITHUB-WORKFLOW.md.
+        ROADMAP pendiente — no hace falta etapa B*.
+  - type: dropdown
+    id: etapa
+    attributes:
+      label: Tipo
+      options:
+        - Sin etapa (ROADMAP pendiente)
+        - Refactor / estructura
+        - Docs
+        - CI / deploy
+        - Deuda técnica
+        - Otro
+    validations:
+      required: true
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      value: |
+        - [ ]
+    validations:
+      required: true

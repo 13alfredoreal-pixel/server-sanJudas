@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Estado as-is / deuda
+    url: https://github.com/13alfredoreal-pixel/server-sanJudas/blob/master/docs/CURRENT-STATE.md
+    about: Inventario e invariantes para refactor
+  - name: Contrato API
+    url: https://github.com/13alfredoreal-pixel/server-sanJudas/blob/master/docs/API-CONTRACT.md
+    about: Endpoints y shapes entre server y client
+  - name: Repo frontend
+    url: https://github.com/13alfredoreal-pixel/client-sanjudas
+    about: Issues de UI van en client-sanjudas

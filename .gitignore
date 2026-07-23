@@ -1,2 +1,47 @@
+# Dependencies
 node_modules/
+
+# Environment / secrets (keep .env.example)
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local uploads / temp (PDFs legacy, scratch)
+uploads/
+tmp/
+temp/
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sw?
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Vercel
 .vercel
+
+# Coverage / tests
+coverage/
+.nyc_output/
+
+# Keys / certs
+*.pem
+*.key
+*.p12
