@@ -1,0 +1,58 @@
+name: Feature
+description: Nueva funcionalidad o mejora de producto (API)
+title: "[BSJT-???] "
+labels:
+  - feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Nomenclatura:** título `[BSJT-XXX] Descripción`. Consulta IDs en server y client para no duplicar.
+        Rama = solo el ID (`BSJT-012`). Ver docs/GITHUB-WORKFLOW.md.
+        ROADMAP de etapas aún pendiente — usa "Sin etapa" si no aplica.
+  - type: dropdown
+    id: etapa
+    attributes:
+      label: Etapa (ROADMAP)
+      description: Opcional hasta que exista ROADMAP formal
+      options:
+        - Sin etapa (ROADMAP pendiente)
+        - Refactor / estructura
+        - Auth / seguridad
+        - Books / Cloudinary
+        - Users / roles
+        - Docs / CI
+        - Otro
+    validations:
+      required: true
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options:
+        - auth
+        - users
+        - books
+        - categories
+        - reviews
+        - analytics
+        - audit
+        - middlewares
+        - docs
+        - ci
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: ¿Qué problema resuelve?
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true

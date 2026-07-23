@@ -1,0 +1,36 @@
+---
+description: Convenciones Express API — módulos, middlewares, rutas /api
+globs: SRC/**/*,index.js,middlewares/**/*,configs/**/*
+alwaysApply: false
+---
+
+# Express API
+
+## Layout por dominio
+
+```
+SRC/<domain>/
+  <domain>.model.js
+  <domain>.controller.js
+  <domain>.routes.js
+```
+
+Montar rutas en `configs/app.js` bajo `/api/<resource>`.
+
+## Auth y roles
+
+- Rutas privadas: `validateJWT` (+ `authenticatedLimiter` cuando aplique).
+- Admin: `isAdmin` después de JWT.
+- Auth pública: `authLimiter` en login/register.
+
+## Controllers
+
+- Respuestas JSON consistentes con el resto del módulo.
+- Errores vía `handleErrors` / `next(error)` — no tragarse excepciones.
+- Validar con `express-validator` en routes; no duplicar lógica frágil en controllers.
+
+## Seguridad
+
+- No loguear tokens ni passwords.
+- Mantener Helmet + CORS credentials.
+- Rate limits ya definidos en `middlewares/request-limit.js`.

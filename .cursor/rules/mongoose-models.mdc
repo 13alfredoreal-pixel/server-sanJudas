@@ -1,0 +1,29 @@
+---
+description: Convenciones Mongoose — esquemas User/Book y refs
+globs: **/*.model.js,configs/db.js
+alwaysApply: false
+---
+
+# Mongoose / MongoDB
+
+## Modelos
+
+- Un schema por archivo `*.model.js`; `export default model('Name', schema)`.
+- `timestamps: true` cuando el dominio lo use (p. ej. Book).
+- `versionKey: false` si el patrón del módulo ya lo usa.
+
+## Campos sensibles
+
+- Password hasheado (Argon2) — nunca devolver password en responses.
+- Roles solo `ADMIN_ROLE` | `USER_ROLE`.
+
+## Archivos Cloudinary
+
+- Book: `pdfUrl` + `pdfPublicId` (requeridos); `coverUrl` + `coverPublicId` opcionales.
+- User: `profilePicture` + `profilePicturePublicId`.
+- Al borrar un recurso, limpiar Cloudinary con el `publicId` correspondiente.
+
+## Refs
+
+- Favoritos / progreso: `ObjectId` → `Book` en User.
+- `uploadedBy` → `User` en Book.
