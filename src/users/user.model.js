@@ -1,87 +1,90 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model } from 'mongoose';
 
 /**
  * Modelo de Usuario:
  * Define la estructura de los usuarios en la base de datos (MongoDB).
  * Incluye validaciones para nombres, correos y contraseñas.
  */
-const userSchema = new Schema({
+const userSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: [true, 'el nombre es obligatorio'],
-        maxLength: [25, 'El nombre no puede tener mas de 25 caracteres'],
-        trim: true
+      type: String,
+      required: [true, 'el nombre es obligatorio'],
+      maxLength: [25, 'El nombre no puede tener mas de 25 caracteres'],
+      trim: true,
     },
     surname: {
-        type: String,
-        required: [true, 'el apellido es obligatorio'],
-        maxLength: [25, 'El apellido no puede tener mas de 25 caracteres'],
-        trim: true
+      type: String,
+      required: [true, 'el apellido es obligatorio'],
+      maxLength: [25, 'El apellido no puede tener mas de 25 caracteres'],
+      trim: true,
     },
     username: {
-        type: String,
-        required: [true, 'el username es obligatorio'],
-        unique: true,
-        trim: true
+      type: String,
+      required: [true, 'el username es obligatorio'],
+      unique: true,
+      trim: true,
     },
     email: {
-        type: String,
-        required: [true, 'el email es obligatorio'],
-        unique: true,
-        trim: true,
-        lowercase: true,
-        match: [/^\S+@\S+\.\S+$/, 'El email no es valido']
+      type: String,
+      required: [true, 'el email es obligatorio'],
+      unique: true,
+      trim: true,
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, 'El email no es valido'],
     },
     password: {
-        type: String,
-        required: [true, 'la contraseña es obligatoria'],
-        minLength: [8, 'la contraseña debe tener almenos 8 caracteres']
+      type: String,
+      required: [true, 'la contraseña es obligatoria'],
+      minLength: [8, 'la contraseña debe tener almenos 8 caracteres'],
     },
     profilePicture: {
-        type: String,
-        default: ''
+      type: String,
+      default: '',
     },
     profilePicturePublicId: {
-        type: String,
-        default: ''
+      type: String,
+      default: '',
     },
     phone: {
-        type: String,
-        minLength: [8, 'el telefono debe tener minimo 8 caracteres'],
-        maxLength: [15, 'el telefono no debe tener mas de 15 caracteres'],
-        trim: true
+      type: String,
+      minLength: [8, 'el telefono debe tener minimo 8 caracteres'],
+      maxLength: [15, 'el telefono no debe tener mas de 15 caracteres'],
+      trim: true,
     },
     role: {
-        type: String,
-        enum: ['ADMIN_ROLE', 'USER_ROLE'],
-        default: 'USER_ROLE'
+      type: String,
+      enum: ['ADMIN_ROLE', 'USER_ROLE'],
+      default: 'USER_ROLE',
     },
     status: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      default: true,
     },
     bio: {
-        type: String,
-        maxLength: [150, 'La biografía no puede tener más de 150 caracteres'],
-        default: ''
+      type: String,
+      maxLength: [150, 'La biografía no puede tener más de 150 caracteres'],
+      default: '',
     },
     favorites: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Book'
-        }
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Book',
+      },
     ],
     readingProgress: [
-        {
-            book: { type: Schema.Types.ObjectId, ref: 'Book' },
-            lastPage: { type: Number, default: 1 },
-            updatedAt: { type: Date, default: Date.now }
-        }
-    ]
-}, {
+      {
+        book: { type: Schema.Types.ObjectId, ref: 'Book' },
+        lastPage: { type: Number, default: 1 },
+        updatedAt: { type: Date, default: Date.now },
+      },
+    ],
+  },
+  {
     timestamps: true,
-    versionKey: false
-})
+    versionKey: false,
+  },
+);
 
 /**
  * Configuración para que cuando el servidor devuelva un usuario como JSON:
@@ -89,9 +92,9 @@ const userSchema = new Schema({
  * 2. Asegure que el campo 'uid' esté disponible.
  */
 userSchema.methods.toJSON = function () {
-    const { password, __v, ...user } = this.toObject();
-    user.uid = user._id;
-    return user;
-}
+  const { password, __v, ...user } = this.toObject();
+  user.uid = user._id;
+  return user;
+};
 
-export default model('User', userSchema)
+export default model('User', userSchema);

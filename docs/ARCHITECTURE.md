@@ -13,13 +13,13 @@ Express (Vercel)  ──►  MongoDB
 
 ## Capas
 
-| Capa | Responsabilidad | Ubicación |
-|------|-----------------|-----------|
-| Bootstrap | dotenv, DNS Atlas, listen | `index.js` |
-| App | Helmet, CORS, parsers, mount routes | `configs/app.js` |
-| Dominio | Controllers + models + routes | `src/<domain>/` |
-| Cross-cutting | JWT, admin, validators, limits | `middlewares/` |
-| Storage | Cloudinary SDK | `configs/cloudinary.js` |
+| Capa          | Responsabilidad                     | Ubicación               |
+| ------------- | ----------------------------------- | ----------------------- |
+| Bootstrap     | dotenv, DNS Atlas, listen           | `index.js`              |
+| App           | Helmet, CORS, parsers, mount routes | `configs/app.js`        |
+| Dominio       | Controllers + models + routes       | `src/<domain>/`         |
+| Cross-cutting | JWT, admin, validators, limits      | `middlewares/`          |
+| Storage       | Cloudinary SDK                      | `configs/cloudinary.js` |
 
 ## Auth
 

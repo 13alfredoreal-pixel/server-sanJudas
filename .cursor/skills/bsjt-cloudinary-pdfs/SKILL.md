@@ -19,11 +19,11 @@ description: >-
 
 ## Endpoints
 
-| Método | Path | Notas |
-|--------|------|-------|
-| POST | `/api/books` | Admin + multipart (PDF ± cover) |
-| GET | `/api/books/:id/pdf` | Proxy PDF (`servePdf`) |
-| GET | `/api/books/:id/signed-url` | JWT; URL temporal |
+| Método | Path                        | Notas                           |
+| ------ | --------------------------- | ------------------------------- |
+| POST   | `/api/books`                | Admin + multipart (PDF ± cover) |
+| GET    | `/api/books/:id/pdf`        | Proxy PDF (`servePdf`)          |
+| GET    | `/api/books/:id/signed-url` | JWT; URL temporal               |
 
 Estáticos legacy: `/api/pdfs` (JWT), `/api/uploads` (assets locales).
 

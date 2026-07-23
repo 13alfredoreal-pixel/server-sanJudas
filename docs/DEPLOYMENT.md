@@ -2,12 +2,12 @@
 
 ## Producción
 
-| Recurso | Valor |
-|---------|-------|
-| Host | Vercel |
-| Entry | `index.js` vía `@vercel/node` |
-| URL | `https://base-rho-lyart.vercel.app` |
-| Config | `vercel.json` |
+| Recurso | Valor                               |
+| ------- | ----------------------------------- |
+| Host    | Vercel                              |
+| Entry   | `index.js` vía `@vercel/node`       |
+| URL     | `https://base-rho-lyart.vercel.app` |
+| Config  | `vercel.json`                       |
 
 ## Variables en Vercel
 

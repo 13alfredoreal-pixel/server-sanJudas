@@ -10,20 +10,20 @@ description: >-
 
 ## Roles
 
-| Rol | Puede |
-|-----|--------|
-| `USER_ROLE` | Catálogo, leer PDF, favoritos, progreso, reviews propias, perfil |
+| Rol          | Puede                                                              |
+| ------------ | ------------------------------------------------------------------ |
+| `USER_ROLE`  | Catálogo, leer PDF, favoritos, progreso, reviews propias, perfil   |
 | `ADMIN_ROLE` | + upload/delete books, categories, promote/delete users, analytics |
 
 ## Entidades
 
-| Modelo | Notas |
-|--------|-------|
-| User | perfil, favorites[], readingProgress[], role, status |
-| Book | title, author, category, description, pdf*, cover*, uploadedBy |
-| Category | name, icon |
-| Review | book, user, rating 1–5, comment |
-| AuditLog | acciones admin (CREATE_BOOK, DELETE_BOOK, PROMOTE_USER, …) |
+| Modelo   | Notas                                                          |
+| -------- | -------------------------------------------------------------- |
+| User     | perfil, favorites[], readingProgress[], role, status           |
+| Book     | title, author, category, description, pdf*, cover*, uploadedBy |
+| Category | name, icon                                                     |
+| Review   | book, user, rating 1–5, comment                                |
+| AuditLog | acciones admin (CREATE_BOOK, DELETE_BOOK, PROMOTE_USER, …)     |
 
 ## Flujos clave
 

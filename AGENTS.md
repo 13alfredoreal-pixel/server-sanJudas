@@ -18,13 +18,13 @@ REST API de la biblioteca digital institucional San Judas Tadeo. Autenticación 
 
 ## Stack
 
-| Capa | Tecnología | Ruta |
-|------|------------|------|
-| HTTP | Express 5 (ESM) | `index.js`, `configs/app.js` |
-| BD | MongoDB + Mongoose | `configs/db.js`, `src/**/*.model.js` |
-| Auth | JWT + Argon2 + cookie refresh | `src/auth/`, `middlewares/jwt-verify.js` |
-| Files | Multer (memory) + Cloudinary | `configs/cloudinary.js`, `src/books/` |
-| Deploy | Vercel (`@vercel/node`) | `vercel.json` |
+| Capa   | Tecnología                    | Ruta                                     |
+| ------ | ----------------------------- | ---------------------------------------- |
+| HTTP   | Express 5 (ESM)               | `index.js`, `configs/app.js`             |
+| BD     | MongoDB + Mongoose            | `configs/db.js`, `src/**/*.model.js`     |
+| Auth   | JWT + Argon2 + cookie refresh | `src/auth/`, `middlewares/jwt-verify.js` |
+| Files  | Multer (memory) + Cloudinary  | `configs/cloudinary.js`, `src/books/`    |
+| Deploy | Vercel (`@vercel/node`)       | `vercel.json`                            |
 
 **Gestor de paquetes:** solo **pnpm** (`pnpm install`). No usar npm/yarn.
 
@@ -53,11 +53,21 @@ Antes de un refactor: leer [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 ```bash
 pnpm install
-pnpm dev      # nodemon
+pnpm dev           # nodemon
 pnpm start
+pnpm lint          # ESLint
+pnpm lint:fix     # ESLint --fix
+pnpm format        # Prettier write
+pnpm format:check  # Prettier check (CI)
 ```
 
 Variables: copiar `.env.example` → `.env`. Nunca commitear `.env`.
+
+### Calidad de código (local)
+
+- **Husky** `pre-commit`: `lint-staged` (ESLint + Prettier en staged).
+- **Husky** `commit-msg`: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `ci:`, `refactor:`, `test:`, `style:`…).
+- Ejemplo: `feat(books): add supabase signed url`
 
 ## Workflow BSJT (obligatorio)
 
@@ -91,8 +101,8 @@ Libros PDF + portadas en Cloudinary; categorías; reseñas 1–5; favoritos y `r
 
 ## Índice Cursor
 
-| Tipo | Path |
-|------|------|
-| Rules | `.cursor/rules/bsjt-project.mdc`, `express-api.mdc`, `mongoose-models.mdc` |
+| Tipo   | Path                                                                                                           |
+| ------ | -------------------------------------------------------------------------------------------------------------- |
+| Rules  | `.cursor/rules/bsjt-project.mdc`, `express-api.mdc`, `mongoose-models.mdc`                                     |
 | Skills | `.cursor/skills/bsjt-express-mongo/`, `bsjt-library-domain/`, `bsjt-cloudinary-pdfs/`, `bsjt-github-workflow/` |
-| Docs | `docs/` (empezar por `CURRENT-STATE.md` + `API-CONTRACT.md`) |
+| Docs   | `docs/` (empezar por `CURRENT-STATE.md` + `API-CONTRACT.md`)                                                   |

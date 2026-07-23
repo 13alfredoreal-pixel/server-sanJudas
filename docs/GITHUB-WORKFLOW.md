@@ -6,12 +6,12 @@ Prefijo de tickets: **BSJT** (compartido conceptualmente con el client; cada iss
 
 ## Nomenclatura
 
-| Elemento | Formato |
-|----------|---------|
-| Issue | `[BSJT-012] Descripción` |
-| Épica | `[BSJT-001] [EPIC] Título` (etapas del ROADMAP cuando exista) |
-| Rama | `BSJT-012` (solo el ID) |
-| PR | `[BSJT-012] …` + `Closes #12` |
+| Elemento | Formato                                                       |
+| -------- | ------------------------------------------------------------- |
+| Issue    | `[BSJT-012] Descripción`                                      |
+| Épica    | `[BSJT-001] [EPIC] Título` (etapas del ROADMAP cuando exista) |
+| Rama     | `BSJT-012` (solo el ID)                                       |
+| PR       | `[BSJT-012] …` + `Closes #12`                                 |
 
 GitHub usa `#12` internamente; **BSJT-012** es la referencia humana.
 

@@ -28,5 +28,8 @@ pnpm  dev
 - pnpm only
 - Docs ES / código EN
 - Preferir cambios acotados; refactor amplio solo con pedido explícito + invariantes
+- **ESLint** + **Prettier** (ver `eslint.config.js`, `.prettierrc.json`)
+- Commits: **Conventional Commits** (Husky `commit-msg`). Ej.: `fix(auth): refresh token secret`
+- Antes de push: `pnpm lint && pnpm format:check`
 
 Detalle workflow: [GITHUB-WORKFLOW.md](./GITHUB-WORKFLOW.md).

@@ -20,13 +20,7 @@ router.get('/', validateJWT, authenticatedLimiter, getCategories);
  * Destino: createCategory (category.controller.js) - Solo Admin
  * Retorno: JSON con éxito, mensaje y la categoría creada.
  */
-router.post(
-    '/',
-    validateJWT,
-    authenticatedLimiter,
-    isAdmin,
-    createCategory
-);
+router.post('/', validateJWT, authenticatedLimiter, isAdmin, createCategory);
 
 /**
  * RUTA: DELETE /:id
@@ -34,12 +28,6 @@ router.post(
  * Destino: deleteCategory (category.controller.js) - Solo Admin
  * Retorno: JSON con mensaje de éxito de eliminación.
  */
-router.delete(
-    '/:id',
-    validateJWT,
-    authenticatedLimiter,
-    isAdmin,
-    deleteCategory
-);
+router.delete('/:id', validateJWT, authenticatedLimiter, isAdmin, deleteCategory);
 
 export default router;

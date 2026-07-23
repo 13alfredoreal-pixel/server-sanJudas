@@ -1,9 +1,9 @@
-import { Router } from 'express'
-import { validateJWT } from '../../middlewares/jwt-verify.js'
-import { addReview, getReviewsByBook, deleteReview } from './review.controller.js'
-import { authenticatedLimiter } from '../../middlewares/request-limit.js'
+import { Router } from 'express';
+import { validateJWT } from '../../middlewares/jwt-verify.js';
+import { addReview, getReviewsByBook, deleteReview } from './review.controller.js';
+import { authenticatedLimiter } from '../../middlewares/request-limit.js';
 
-const router = Router()
+const router = Router();
 
 // Todas las rutas de reseñas requieren estar logueado
 
@@ -13,7 +13,7 @@ const router = Router()
  * Destino: addReview (review.controller.js)
  * Retorno: JSON con éxito, mensaje y los datos de la reseña guardada.
  */
-router.post('/', validateJWT, authenticatedLimiter, addReview)
+router.post('/', validateJWT, authenticatedLimiter, addReview);
 
 /**
  * RUTA: GET /book/:bookId
@@ -21,7 +21,7 @@ router.post('/', validateJWT, authenticatedLimiter, addReview)
  * Destino: getReviewsByBook (review.controller.js)
  * Retorno: JSON con array de reseñas, promedio y total.
  */
-router.get('/book/:bookId', validateJWT, authenticatedLimiter, getReviewsByBook)
+router.get('/book/:bookId', validateJWT, authenticatedLimiter, getReviewsByBook);
 
 /**
  * RUTA: DELETE /:id
@@ -29,6 +29,6 @@ router.get('/book/:bookId', validateJWT, authenticatedLimiter, getReviewsByBook)
  * Destino: deleteReview (review.controller.js)
  * Retorno: JSON con mensaje de éxito confirmando la eliminación.
  */
-router.delete('/:id', validateJWT, authenticatedLimiter, deleteReview)
+router.delete('/:id', validateJWT, authenticatedLimiter, deleteReview);
 
-export default router
+export default router;
