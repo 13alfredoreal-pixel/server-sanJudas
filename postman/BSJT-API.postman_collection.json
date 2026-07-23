@@ -398,35 +398,8 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/books?page=1&limit=10&search=&category=",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "books"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                },
-                {
-                  "key": "search",
-                  "value": "",
-                  "description": "título o autor"
-                },
-                {
-                  "key": "category",
-                  "value": "",
-                  "description": "Nombre categoría o Todos"
-                }
-              ]
-            }
+            "url": "{{baseUrl}}/books?page=1&limit=10&search=&category=",
+            "description": "Query: page, limit, search, category"
           }
         },
         {

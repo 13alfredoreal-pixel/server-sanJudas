@@ -27,7 +27,7 @@ export const dbConnection = async () => {
       throw new Error('La variable URI_MONGODB no está definida en el archivo .env');
     }
 
-    console.log('MongoDB | Intentando conectar a Atlas...');
+    console.log('MongoDB | Intentando conectar...');
 
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 10000,
