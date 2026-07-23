@@ -11,6 +11,7 @@
 | Supabase PDFs + Postman                     | Hecho     | BSJT-004        |
 | ESLint / Prettier / Husky (server)          | Hecho     | BSJT-005        |
 | Env validation, Multer 2, seed harden, docs | En curso  | BSJT-006        |
+| API versionada `/api/v1`                    | En curso  | BSJT-009        |
 | Alinear client con API                      | Pendiente | client BSJT-007 |
 | Tooling client                              | Pendiente | client BSJT-008 |
 | Deploy Vercel pnpm/argon2                   | Aplazado  | —               |

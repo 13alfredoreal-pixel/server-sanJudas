@@ -18,14 +18,14 @@ pnpm-workspace.yaml   # onlyBuiltDependencies: argon2
 
 ## Módulos API
 
-| Prefijo           | Carpeta           |
-| ----------------- | ----------------- |
-| `/api/auth`       | `src/auth/`       |
-| `/api/users`      | `src/users/`      |
-| `/api/books`      | `src/books/`      |
-| `/api/categories` | `src/categories/` |
-| `/api/reviews`    | `src/reviews/`    |
-| `/api/analytics`  | `src/analytics/`  |
+| Prefijo              | Carpeta           |
+| -------------------- | ----------------- |
+| `/api/v1/auth`       | `src/auth/`       |
+| `/api/v1/users`      | `src/users/`      |
+| `/api/v1/books`      | `src/books/`      |
+| `/api/v1/categories` | `src/categories/` |
+| `/api/v1/reviews`    | `src/reviews/`    |
+| `/api/v1/analytics`  | `src/analytics/`  |
 
 Audit: `src/audit/` (logger, sin router).
 
@@ -50,7 +50,7 @@ Audit: `src/audit/` (logger, sin router).
 
 ## Invariantes
 
-1. Prefijo `/api/*` y contrato en [API-CONTRACT.md](./API-CONTRACT.md).
+1. Prefijo `/api/v1/*` y contrato en [API-CONTRACT.md](./API-CONTRACT.md).
 2. Auth: JWT Bearer + refresh cookie HttpOnly + Argon2; secretos access/refresh distintos.
 3. Roles: `USER_ROLE` | `ADMIN_ROLE`. Seed admin solo con `ADMIN_PASSWORD` en env.
 4. Books: PDF en **Supabase** (`pdfPublicId`); covers/avatars en **Cloudinary**; dual-path HTTP legacy vía `pdfUrl`.

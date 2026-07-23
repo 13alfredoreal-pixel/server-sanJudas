@@ -35,11 +35,11 @@ CLOUDINARY_API_SECRET=
 
 ## Endpoints
 
-| Método | Path                        | Notas                                 |
-| ------ | --------------------------- | ------------------------------------- |
-| POST   | `/api/books`                | Admin; PDF→Supabase, cover→Cloudinary |
-| GET    | `/api/books/:id/pdf`        | Proxy JWT                             |
-| GET    | `/api/books/:id/signed-url` | Signed Supabase (1h) o URL legacy     |
+| Método | Path                           | Notas                                 |
+| ------ | ------------------------------ | ------------------------------------- |
+| POST   | `/api/v1/books`                | Admin; PDF→Supabase, cover→Cloudinary |
+| GET    | `/api/v1/books/:id/pdf`        | Proxy JWT                             |
+| GET    | `/api/v1/books/:id/signed-url` | Signed Supabase (1h) o URL legacy     |
 
 ## Al implementar
 
