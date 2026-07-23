@@ -2,6 +2,7 @@ import User from '../users/user.model.js';
 import { hash, verify } from 'argon2';
 import jwt from 'jsonwebtoken';
 import { generarJWT, generarRefreshJWT, getRefreshSecret } from '../../helpers/jwt-generate.js';
+import { destroyUploadedImage } from '../../helpers/cloudinary-cleanup.js';
 
 const REFRESH_COOKIE = {
   httpOnly: true,
@@ -34,6 +35,7 @@ export const register = async (req, res) => {
       uid: newUser.id,
     });
   } catch (error) {
+    await destroyUploadedImage(req.filePublicId);
     return res.status(500).json({
       message: 'Error al registrar el usuario',
       err: error.message,

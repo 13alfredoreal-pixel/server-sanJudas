@@ -19,8 +19,8 @@ router.post(
   '/register',
   publicLimiter,
   uploadProfilePicture.single('profilePicture'),
-  processFileUpload,
   registerValidator,
+  processFileUpload,
   register,
 );
 
