@@ -11,8 +11,8 @@
 
 ```bash
 cp .env.example .env
-npm install
-npm run dev
+pnpm install
+pnpm  dev
 ```
 
 ## PR
@@ -25,7 +25,7 @@ npm run dev
 
 ## Estilo
 
-- npm only
+- pnpm only
 - Docs ES / código EN
 - Preferir cambios acotados; refactor amplio solo con pedido explícito + invariantes
 

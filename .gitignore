@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Lockfiles de otros gestores (este repo usa pnpm)
+package-lock.json
+yarn.lock
+
 # Environment / secrets (keep .env.example)
 .env
 .env.*
@@ -14,8 +18,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local uploads / temp (PDFs legacy, scratch)
+# Local uploads / temp (legacy — no usar)
 uploads/
+assets/img/
 tmp/
 temp/
 *.tmp

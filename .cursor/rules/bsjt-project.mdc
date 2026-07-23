@@ -14,9 +14,10 @@ alwaysApply: true
 
 ## Stack
 
-- **npm** exclusivamente (no pnpm ni yarn).
-- Express 5 ESM; módulos en `SRC/<domain>/`.
+- **pnpm** exclusivamente (no npm ni yarn para instalar).
+- Express 5 ESM; módulos en `src/<domain>/`.
 - No asumir monorepo ni `@shared`.
+- No servir ni guardar archivos en disco local; PDFs/portadas/avatares → Cloudinary.
 
 ## Dominio
 

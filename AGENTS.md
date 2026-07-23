@@ -21,41 +21,40 @@ REST API de la biblioteca digital institucional San Judas Tadeo. Autenticación 
 | Capa | Tecnología | Ruta |
 |------|------------|------|
 | HTTP | Express 5 (ESM) | `index.js`, `configs/app.js` |
-| BD | MongoDB + Mongoose | `configs/db.js`, `SRC/**/*.model.js` |
-| Auth | JWT + Argon2 + cookie refresh | `SRC/auth/`, `middlewares/jwt-verify.js` |
-| Files | Multer + Cloudinary | `configs/cloudinary.js`, `SRC/books/` |
+| BD | MongoDB + Mongoose | `configs/db.js`, `src/**/*.model.js` |
+| Auth | JWT + Argon2 + cookie refresh | `src/auth/`, `middlewares/jwt-verify.js` |
+| Files | Multer (memory) + Cloudinary | `configs/cloudinary.js`, `src/books/` |
 | Deploy | Vercel (`@vercel/node`) | `vercel.json` |
 
-**Gestor de paquetes:** solo **npm**.
+**Gestor de paquetes:** solo **pnpm** (`pnpm install`). No usar npm/yarn.
 
 ## Estructura
 
 ```
 configs/           → app, db, cloudinary
-SRC/
+src/
   auth/            → register, login, refresh, logout
   users/           → perfil, favoritos, progreso, promote
-  books/           → CRUD-ish, PDF proxy, signed URL
+  books/           → CRUD-ish, PDF proxy, signed URL (Cloudinary)
   categories/
   reviews/
   analytics/       → admin stats
   audit/           → AuditLog
-middlewares/       → JWT, admin, validators, CORS, rate-limit
+middlewares/       → JWT, admin, validators, CORS, rate-limit, multer memory
 helpers/
-scripts/
-docs/              → API-CONTRACT, ARCHITECTURE, CURRENT-STATE, … (ROADMAP stub)
-.cursor/rules/     → reglas Cursor
-.cursor/skills/    → skills del proyecto
+docs/
+.cursor/rules/
+.cursor/skills/
 ```
 
-Antes de un refactor: leer [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) (invariantes + deuda).
+Antes de un refactor: leer [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 ## Comandos esenciales
 
 ```bash
-npm install
-npm run dev      # nodemon
-npm start        # producción local
+pnpm install
+pnpm dev      # nodemon
+pnpm start
 ```
 
 Variables: copiar `.env.example` → `.env`. Nunca commitear `.env`.
@@ -72,23 +71,23 @@ Ver [docs/GITHUB-WORKFLOW.md](docs/GITHUB-WORKFLOW.md) y [docs/CONTRIBUTING.md](
 
 ## Roles
 
-`USER_ROLE` (default) | `ADMIN_ROLE` — enum en `SRC/users/user.model.js`.
+`USER_ROLE` (default) | `ADMIN_ROLE` — enum en `src/users/user.model.js`.
 
-Admin seed: `SRC/users/user.seed.js` (`admin@sanjudas.edu.gt`).
+Admin seed: `src/users/user.seed.js` (`admin@sanjudas.edu.gt`).
 
 ## Dominio
 
-Libros PDF + portadas en Cloudinary; categorías; reseñas 1–5; favoritos y `readingProgress` en User; `AuditLog` en acciones admin.
-
-Detalle: `.cursor/skills/bsjt-library-domain/` y [docs/API-CONTRACT.md](docs/API-CONTRACT.md).
+Libros PDF + portadas en Cloudinary; categorías; reseñas 1–5; favoritos y `readingProgress` en User; `AuditLog` en acciones admin. **Sin almacenamiento local de archivos.**
 
 ## Convenciones
 
-- Módulos por dominio bajo `SRC/<domain>/` (`*.model.js`, `*.controller.js`, `*.routes.js`) — paths as-is; pueden moverse en refactor si se actualizan docs.
-- Prefijo de rutas: `/api/...` montado en `configs/app.js`.
+- Módulos por dominio bajo `src/<domain>/`.
+- Preferir **named exports** (`export const`). Default solo en `*.routes.js` (`export default router`) y modelos Mongoose.
+- Funciones flecha por defecto (salvo APIs que exijan `function`, p. ej. `schema.methods` con `this`).
+- Prefijo `/api/...` montado en `configs/app.js`.
 - Docs en español; código en inglés.
-- Sin secretos en el diff. Preferir cambios acotados; refactor amplio solo con pedido explícito + invariantes de `CURRENT-STATE.md`.
-- **ROADMAP pendiente** (stub): no priorizar por etapas B0–B6 inventadas.
+- Sin secretos en el diff. Preferir cambios acotados; refactor amplio solo con pedido explícito.
+- **ROADMAP pendiente** (stub).
 
 ## Índice Cursor
 

@@ -17,7 +17,7 @@ Express (Vercel)  ──►  MongoDB
 |------|-----------------|-----------|
 | Bootstrap | dotenv, DNS Atlas, listen | `index.js` |
 | App | Helmet, CORS, parsers, mount routes | `configs/app.js` |
-| Dominio | Controllers + models + routes | `SRC/<domain>/` |
+| Dominio | Controllers + models + routes | `src/<domain>/` |
 | Cross-cutting | JWT, admin, validators, limits | `middlewares/` |
 | Storage | Cloudinary SDK | `configs/cloudinary.js` |
 
