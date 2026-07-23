@@ -1,6 +1,6 @@
 # Current state — server-sanJudas
 
-Inventario **as-is** tras BSJT-004/005/006. Actualizar cuando cambie la estructura real.
+Inventario **as-is** tras BSJT-004/005/006/009 (API `/api/v1` lista).
 
 ## Layout actual
 
@@ -41,12 +41,13 @@ Audit: `src/audit/` (logger, sin router).
 - ESLint + Prettier + Husky (lint-staged / commitlint)
 - CI: `pnpm lint` + `pnpm format:check`
 
-## Deuda consciente (no en este ticket)
+## Deuda consciente (aplazada)
 
-- Deploy Vercel (pnpm/argon2) — aplazado
-- Rotación de secretos históricos en git — aplazado
-- Suite de tests automatizados — aplazado
-- Alineación client + tooling client — BSJT-007 / BSJT-008 en `client-sanjudas`
+- Deploy Vercel (pnpm/argon2)
+- Rotación de secretos históricos en git
+- Suite de tests automatizados
+
+Client alineado (BSJT-007/008/010) en `client-sanjudas`.
 
 ## Invariantes
 
