@@ -72,10 +72,7 @@ Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl`, 
 
 ## Estáticos
 
-| Path | Notas |
-|------|-------|
-| `/api/pdfs/*` | JWT + static uploads locales |
-| `/api/uploads/*` | Assets img (perfiles legacy) |
+Ya no hay montajes `/api/pdfs` ni `/api/uploads`. PDFs vía Cloudinary (`/books/:id/pdf` proxy o `signed-url`). Avatares = URL Cloudinary en `profilePicture`.
 
 ---
 

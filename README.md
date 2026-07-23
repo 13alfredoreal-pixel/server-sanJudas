@@ -37,21 +37,21 @@ Express 5 · Mongoose/MongoDB · JWT + Argon2 · Cloudinary · Multer · Helmet 
 cp .env.example .env
 # Completar URI_MONGODB, TOKEN_KEY, CLOUDINARY_*
 
-npm install
-npm run dev
+pnpm install
+pnpm  dev
 ```
 
 El servidor escucha en `process.env.PORT` (típicamente `3000`).
 
 Al arrancar se ejecuta el seed de admin si no existe ningún `ADMIN_ROLE`.
 
-En otra terminal, arranca el client (`npm run dev` en client-sanjudas) si necesitas la UI.
+En otra terminal, arranca el client (`pnpm  dev` en client-sanjudas) si necesitas la UI.
 
 ## Scripts
 
 | Comando | Descripción |
 |---------|-------------|
-| `npm run dev` | Nodemon |
+| `pnpm  dev` | Nodemon |
 | `npm start` | Node producción |
 | `npm test` | Placeholder (sin suite aún) |
 
@@ -69,7 +69,7 @@ Producción actual: `https://base-rho-lyart.vercel.app`
 
 ```
 configs/     app.js, db.js, cloudinary.js
-SRC/         auth, users, books, categories, reviews, analytics, audit
+src/         auth, users, books, categories, reviews, analytics, audit
 middlewares/ JWT, admin, validators, CORS, limits
 docs/        arquitectura, contrato, current-state, workflow
 ```

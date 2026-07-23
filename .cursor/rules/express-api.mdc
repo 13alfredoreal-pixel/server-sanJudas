@@ -1,6 +1,6 @@
 ---
 description: Convenciones Express API — módulos, middlewares, rutas /api
-globs: SRC/**/*,index.js,middlewares/**/*,configs/**/*
+globs: src/**/*,index.js,middlewares/**/*,configs/**/*
 alwaysApply: false
 ---
 
@@ -9,7 +9,7 @@ alwaysApply: false
 ## Layout por dominio
 
 ```
-SRC/<domain>/
+src/<domain>/
   <domain>.model.js
   <domain>.controller.js
   <domain>.routes.js
@@ -28,9 +28,11 @@ Montar rutas en `configs/app.js` bajo `/api/<resource>`.
 - Respuestas JSON consistentes con el resto del módulo.
 - Errores vía `handleErrors` / `next(error)` — no tragarse excepciones.
 - Validar con `express-validator` en routes; no duplicar lógica frágil en controllers.
+- Preferir `export const` (named). Routes: `export default router`. Models: `export default model(...)`.
 
 ## Seguridad
 
 - No loguear tokens ni passwords.
 - Mantener Helmet + CORS credentials.
-- Rate limits ya definidos en `middlewares/request-limit.js`.
+- Rate limits en `middlewares/request-limit.js`.
+- Archivos solo vía Multer memory → Cloudinary (sin disco local).

@@ -1,4 +1,4 @@
-import User from '../SRC/users/user.model.js'
+import User from '../src/users/user.model.js'
 
 /**
  * Middleware isAdmin:
