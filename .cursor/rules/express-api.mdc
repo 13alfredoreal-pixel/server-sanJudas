@@ -15,7 +15,7 @@ src/<domain>/
   <domain>.routes.js
 ```
 
-Montar rutas en `configs/app.js` bajo `/api/<resource>`.
+Montar rutas en `configs/app.js` bajo `/api/v1/<resource>`.
 
 ## Auth y roles
 

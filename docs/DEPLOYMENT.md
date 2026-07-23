@@ -38,8 +38,8 @@ Tras cambiar dominio del frontend, actualizar `middlewares/cors.config.js` (allo
 
 ## Checklist post-deploy
 
-- [ ] `POST /api/auth/login` responde
-- [ ] `GET /api/books` con JWT
+- [ ] `POST /api/v1/auth/login` responde
+- [ ] `GET /api/v1/books` con JWT
 - [ ] Upload libro admin (PDF Supabase + cover Cloudinary) OK
 - [ ] Proxy/signed PDF OK desde `biblioteca-sjt.web.app`
 - [ ] Admin seed no duplica admins innecesariamente

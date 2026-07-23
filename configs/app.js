@@ -15,6 +15,28 @@ import { setupAdmin } from '../src/users/user.seed.js';
 import { handleErrors } from '../middlewares/handle-errors.js';
 import { corsMiddleware } from '../middlewares/cors.config.js';
 
+/** Versión canónica del API. */
+export const API_VERSION = 'v1';
+export const API_PREFIX = `/api/${API_VERSION}`;
+
+const markDeprecatedAlias = (_req, res, next) => {
+  res.setHeader('Deprecation', 'true');
+  res.setHeader('Sunset', 'Sat, 01 Aug 2026 00:00:00 GMT');
+  res.setHeader('Link', `<${API_PREFIX}>; rel="successor-version"`);
+  next();
+};
+
+const mountApi = (app, prefix, { deprecated = false } = {}) => {
+  const stack = deprecated ? [markDeprecatedAlias] : [];
+
+  app.use(`${prefix}/auth`, ...stack, authRoutes);
+  app.use(`${prefix}/users`, ...stack, userRoutes);
+  app.use(`${prefix}/books`, ...stack, bookRoutes);
+  app.use(`${prefix}/categories`, ...stack, categoryRoutes);
+  app.use(`${prefix}/reviews`, ...stack, reviewRoutes);
+  app.use(`${prefix}/analytics`, ...stack, analyticsRoutes);
+};
+
 const applyMiddlewares = (app) => {
   app.use(
     helmet({
@@ -27,15 +49,22 @@ const applyMiddlewares = (app) => {
   app.use(express.json({ limit: '100mb' }));
   app.use(express.urlencoded({ extended: false, limit: '100mb' }));
   app.use(cookieParser());
-  app.use('/api/auth', authRoutes);
 };
 
 const applyRoutes = (app) => {
-  app.use('/api/users', userRoutes);
-  app.use('/api/books', bookRoutes);
-  app.use('/api/categories', categoryRoutes);
-  app.use('/api/reviews', reviewRoutes);
-  app.use('/api/analytics', analyticsRoutes);
+  mountApi(app, API_PREFIX);
+
+  // Alias sin versión — transición; preferir /api/v1
+  mountApi(app, '/api', { deprecated: true });
+
+  app.get(['/api', API_PREFIX], (_req, res) => {
+    res.status(200).json({
+      message: 'Biblioteca Virtual SJT API',
+      version: API_VERSION,
+      basePath: API_PREFIX,
+      deprecatedAlias: '/api/<resource> (usar /api/v1/<resource>)',
+    });
+  });
 };
 
 const connectDatabase = async () => {
@@ -54,7 +83,7 @@ export const initServer = async () => {
 
     const port = process.env.PORT;
     const server = app.listen(port, () => {
-      console.log(`Server running on port: ${port}`);
+      console.log(`Server running on port: ${port} (${API_PREFIX})`);
     });
 
     server.on('error', (err) => {

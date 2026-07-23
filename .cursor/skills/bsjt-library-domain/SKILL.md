@@ -31,7 +31,7 @@ description: >-
 2. **Catálogo** — list/filter books; get by id.
 3. **Lectura** — proxy PDF o signed URL Cloudinary.
 4. **Social** — toggle favorite; add/delete review.
-5. **Admin** — multipart upload book; stats `/api/analytics`.
+5. **Admin** — multipart upload book; stats `/api/v1/analytics`.
 
 ## Canon
 

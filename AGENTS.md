@@ -94,7 +94,7 @@ Libros PDF en **Supabase Storage**; portadas/avatares en **Cloudinary**; categor
 - Módulos por dominio bajo `src/<domain>/`.
 - Preferir **named exports** (`export const`). Default solo en `*.routes.js` (`export default router`) y modelos Mongoose.
 - Funciones flecha por defecto (salvo APIs que exijan `function`, p. ej. `schema.methods` con `this`).
-- Prefijo `/api/...` montado en `configs/app.js`.
+- Prefijo `/api/v1/...` montado en `configs/app.js`.
 - Docs en español; código en inglés.
 - Sin secretos en el diff. Preferir cambios acotados; refactor amplio solo con pedido explícito.
 - **ROADMAP pendiente** (stub).

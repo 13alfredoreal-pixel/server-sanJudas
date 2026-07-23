@@ -2,8 +2,11 @@
 
 Fuente de verdad entre **server-sanJudas** y **client-sanjudas**. Actualizar en el mismo PR que cambie endpoints o shapes.
 
-Base URL prod: `https://base-rho-lyart.vercel.app/api`  
-Local: `http://localhost:<PORT>/api`
+Base URL prod: `https://base-rho-lyart.vercel.app/api/v1`  
+Local: `http://localhost:<PORT>/api/v1`
+
+**Versión canónica:** `v1` (`/api/v1/...`).  
+Alias legacy `/api/...` (sin versión) sigue montado temporalmente con headers `Deprecation` / `Sunset`; migrar clientes a `/api/v1`.
 
 Auth: header `Authorization: Bearer <accessToken>` salvo donde se indique.  
 Cookies: `withCredentials: true` para refresh.
@@ -12,7 +15,7 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 
 ---
 
-## Auth — `/api/auth`
+## Auth — `/api/v1/auth`
 
 | Método | Path             | Auth   | Descripción                         |
 | ------ | ---------------- | ------ | ----------------------------------- |
@@ -21,7 +24,7 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 | POST   | `/refresh-token` | Cookie | Nuevo access token                  |
 | POST   | `/logout`        | Cookie | Limpia sesión                       |
 
-## Users — `/api/users`
+## Users — `/api/v1/users`
 
 | Método | Path                       | Auth  | Notas                     |
 | ------ | -------------------------- | ----- | ------------------------- |
@@ -35,7 +38,7 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 | GET    | `/favorites`               | JWT   | Libros populados          |
 | PATCH  | `/reading-progress`        | JWT   | Body: `{ bookId, page }`  |
 
-## Books — `/api/books`
+## Books — `/api/v1/books`
 
 | Método | Path              | Auth      | Notas                                               |
 | ------ | ----------------- | --------- | --------------------------------------------------- |
@@ -50,7 +53,7 @@ Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl` (
 
 PDFs: **Supabase Storage**. Portadas: **Cloudinary**. Ver [STORAGE-SUPABASE.md](./STORAGE-SUPABASE.md).
 
-## Categories — `/api/categories`
+## Categories — `/api/v1/categories`
 
 | Método | Path   | Auth  |
 | ------ | ------ | ----- |
@@ -58,7 +61,7 @@ PDFs: **Supabase Storage**. Portadas: **Cloudinary**. Ver [STORAGE-SUPABASE.md](
 | POST   | `/`    | Admin |
 | DELETE | `/:id` | Admin |
 
-## Reviews — `/api/reviews`
+## Reviews — `/api/v1/reviews`
 
 | Método | Path            | Auth                |
 | ------ | --------------- | ------------------- |
@@ -66,7 +69,7 @@ PDFs: **Supabase Storage**. Portadas: **Cloudinary**. Ver [STORAGE-SUPABASE.md](
 | GET    | `/book/:bookId` | JWT                 |
 | DELETE | `/:id`          | JWT (autor o admin) |
 
-## Analytics — `/api/analytics`
+## Analytics — `/api/v1/analytics`
 
 | Método | Path | Auth  |
 | ------ | ---- | ----- |
