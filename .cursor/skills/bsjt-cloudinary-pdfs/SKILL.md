@@ -9,10 +9,10 @@ description: >-
 
 ## División
 
-| Asset | Provider | Config |
-|-------|----------|--------|
-| PDF | **Supabase Storage** (bucket privado) | `configs/supabase.js`, `helpers/pdf-storage.js` |
-| Portada / avatar | **Cloudinary** | `configs/cloudinary.js` |
+| Asset            | Provider                              | Config                                          |
+| ---------------- | ------------------------------------- | ----------------------------------------------- |
+| PDF              | **Supabase Storage** (bucket privado) | `configs/supabase.js`, `helpers/pdf-storage.js` |
+| Portada / avatar | **Cloudinary**                        | `configs/cloudinary.js`                         |
 
 Ver `docs/STORAGE-SUPABASE.md`.
 
@@ -35,11 +35,11 @@ CLOUDINARY_API_SECRET=
 
 ## Endpoints
 
-| Método | Path                        | Notas                                          |
-| ------ | --------------------------- | ---------------------------------------------- |
-| POST   | `/api/books`                | Admin; PDF→Supabase, cover→Cloudinary          |
-| GET    | `/api/books/:id/pdf`        | Proxy JWT                                      |
-| GET    | `/api/books/:id/signed-url` | Signed Supabase (1h) o URL legacy              |
+| Método | Path                        | Notas                                 |
+| ------ | --------------------------- | ------------------------------------- |
+| POST   | `/api/books`                | Admin; PDF→Supabase, cover→Cloudinary |
+| GET    | `/api/books/:id/pdf`        | Proxy JWT                             |
+| GET    | `/api/books/:id/signed-url` | Signed Supabase (1h) o URL legacy     |
 
 ## Al implementar
 

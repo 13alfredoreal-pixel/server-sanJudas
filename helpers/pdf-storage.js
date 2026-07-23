@@ -7,12 +7,10 @@ const isHttpUrl = (value = '') => /^https?:\/\//i.test(value);
  * @returns {{ path: string }}
  */
 export const uploadPdfBuffer = async (buffer, objectPath, contentType = 'application/pdf') => {
-  const { data, error } = await supabase.storage
-    .from(PDF_BUCKET)
-    .upload(objectPath, buffer, {
-      contentType,
-      upsert: false,
-    });
+  const { data, error } = await supabase.storage.from(PDF_BUCKET).upload(objectPath, buffer, {
+    contentType,
+    upsert: false,
+  });
 
   if (error) {
     throw new Error(`Supabase PDF upload failed: ${error.message}`);

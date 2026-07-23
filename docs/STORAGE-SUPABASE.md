@@ -23,13 +23,13 @@ SUPABASE_PDF_BUCKET=biblioteca-pdfs
 
 ## Comportamiento API
 
-| Acción | Storage |
-|--------|---------|
-| `POST /api/books` (pdf) | Supabase path → `Book.pdfPublicId` |
-| `POST /api/books` (cover) | Cloudinary → `coverUrl` / `coverPublicId` |
-| `GET /api/books/:id/signed-url` | Signed URL Supabase (1h) o URL legacy Cloudinary |
-| `GET /api/books/:id/pdf` | Proxy stream (Supabase o HTTP legacy) |
-| `DELETE /api/books/:id` | Borra PDF en Supabase (o Cloudinary legacy) + cover Cloudinary |
+| Acción                          | Storage                                                        |
+| ------------------------------- | -------------------------------------------------------------- |
+| `POST /api/books` (pdf)         | Supabase path → `Book.pdfPublicId`                             |
+| `POST /api/books` (cover)       | Cloudinary → `coverUrl` / `coverPublicId`                      |
+| `GET /api/books/:id/signed-url` | Signed URL Supabase (1h) o URL legacy Cloudinary               |
+| `GET /api/books/:id/pdf`        | Proxy stream (Supabase o HTTP legacy)                          |
+| `DELETE /api/books/:id`         | Borra PDF en Supabase (o Cloudinary legacy) + cover Cloudinary |
 
 Libros **antiguos** con `pdfUrl` https (Cloudinary) siguen leyéndose por proxy.
 

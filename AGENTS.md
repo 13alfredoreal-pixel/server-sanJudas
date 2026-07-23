@@ -18,13 +18,13 @@ REST API de la biblioteca digital institucional San Judas Tadeo. Autenticación 
 
 ## Stack
 
-| Capa   | Tecnología                                                          | Ruta                                                      |
-| ------ | ------------------------------------------------------------------- | --------------------------------------------------------- |
-| HTTP   | Express 5 (ESM)                                                     | `index.js`, `configs/app.js`                              |
-| BD     | MongoDB + Mongoose                                                  | `configs/db.js`, `src/**/*.model.js`                      |
-| Auth   | JWT + Argon2 + cookie refresh                                       | `src/auth/`, `middlewares/jwt-verify.js`                  |
+| Capa   | Tecnología                                                        | Ruta                                                         |
+| ------ | ----------------------------------------------------------------- | ------------------------------------------------------------ |
+| HTTP   | Express 5 (ESM)                                                   | `index.js`, `configs/app.js`                                 |
+| BD     | MongoDB + Mongoose                                                | `configs/db.js`, `src/**/*.model.js`                         |
+| Auth   | JWT + Argon2 + cookie refresh                                     | `src/auth/`, `middlewares/jwt-verify.js`                     |
 | Files  | Multer (memory) + **Supabase** (PDFs) + **Cloudinary** (imágenes) | `configs/supabase.js`, `configs/cloudinary.js`, `src/books/` |
-| Deploy | Vercel (`@vercel/node`)                                             | `vercel.json`                                             |
+| Deploy | Vercel (`@vercel/node`)                                           | `vercel.json`                                                |
 
 **Gestor de paquetes:** solo **pnpm** (`pnpm install`). No usar npm/yarn.
 

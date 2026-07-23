@@ -23,8 +23,7 @@ const uploadBufferToCloudinary = (buffer, options) =>
 
 const isHttpUrl = (value = '') => /^https?:\/\//i.test(value);
 
-const bookHasPdf = (book) =>
-  Boolean(book.pdfPublicId) || isHttpUrl(book.pdfUrl);
+const bookHasPdf = (book) => Boolean(book.pdfPublicId) || isHttpUrl(book.pdfUrl);
 
 export const getBooks = async (req, res) => {
   try {
@@ -220,7 +219,9 @@ export const servePdf = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
     if (!book || !bookHasPdf(book)) {
-      return res.status(404).json({ message: book ? 'Este libro no tiene PDF' : 'Libro no encontrado' });
+      return res
+        .status(404)
+        .json({ message: book ? 'Este libro no tiene PDF' : 'Libro no encontrado' });
     }
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -269,7 +270,9 @@ export const getPdfSignedUrl = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
     if (!book || !bookHasPdf(book)) {
-      return res.status(404).json({ message: book ? 'Este libro no tiene PDF' : 'Libro no encontrado' });
+      return res
+        .status(404)
+        .json({ message: book ? 'Este libro no tiene PDF' : 'Libro no encontrado' });
     }
 
     const source = resolvePdfSource(book);
