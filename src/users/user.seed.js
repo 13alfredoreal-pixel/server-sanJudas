@@ -2,13 +2,11 @@ import User from './user.model.js';
 import { hash } from 'argon2';
 
 /**
- * setupAdmin:
- * Verifica si existe un administrador en la base de datos.
- * Si no existe, crea uno por defecto.
+ * setupAdmin: crea un ADMIN_ROLE solo si no existe ninguno.
+ * Requiere ADMIN_PASSWORD en .env (no hay password hardcodeado).
  */
 export const setupAdmin = async () => {
   try {
-    // Buscamos si ya existe algún usuario con el rol ADMIN_ROLE
     const adminExists = await User.findOne({ role: 'ADMIN_ROLE' });
 
     if (adminExists) {
@@ -16,31 +14,37 @@ export const setupAdmin = async () => {
       return;
     }
 
-    // Datos del administrador por defecto
-    const defaultAdmin = {
-      name: 'Administrador',
-      surname: 'Principal',
-      username: 'admin',
-      email: 'admin@sanjudas.edu.gt',
-      password: 'Admin123!', // Contraseña segura inicial
-      role: 'ADMIN_ROLE',
-    };
+    const password = process.env.ADMIN_PASSWORD?.trim();
+    if (!password) {
+      console.warn(
+        'SEEDER | No hay ADMIN_ROLE y falta ADMIN_PASSWORD en .env — no se crea admin. Define ADMIN_PASSWORD y reinicia.',
+      );
+      return;
+    }
 
-    // Encriptamos la contraseña
-    const hashedPassword = await hash(defaultAdmin.password);
+    if (password.length < 8) {
+      console.warn('SEEDER | ADMIN_PASSWORD debe tener al menos 8 caracteres — no se crea admin.');
+      return;
+    }
 
-    // Creamos el usuario
+    const username = process.env.ADMIN_USERNAME?.trim() || 'admin';
+    const email = process.env.ADMIN_EMAIL?.trim() || 'admin@sanjudas.edu.gt';
+    const name = process.env.ADMIN_NAME?.trim() || 'Administrador';
+    const surname = process.env.ADMIN_SURNAME?.trim() || 'Principal';
+
     await User.create({
-      ...defaultAdmin,
-      password: hashedPassword,
+      name,
+      surname,
+      username,
+      email,
+      password: await hash(password),
+      role: 'ADMIN_ROLE',
     });
 
-    console.log('********************************************************');
-    console.log('*   SEEDER: Administrador creado exitosamente          *');
-    console.log('*   Usuario: admin                                     *');
-    console.log('*   Password: Admin123!                                *');
-    console.log('********************************************************');
+    console.log('SEEDER | Administrador creado');
+    console.log(`SEEDER | username=${username} email=${email}`);
+    console.log('SEEDER | password = valor de ADMIN_PASSWORD (no se imprime)');
   } catch (error) {
-    console.error('!!! SEEDER: Error al crear el administrador inicial:', error.message);
+    console.error('SEEDER | Error al crear el administrador inicial:', error.message);
   }
 };

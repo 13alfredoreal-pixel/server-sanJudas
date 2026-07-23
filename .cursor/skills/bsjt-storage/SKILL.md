@@ -1,5 +1,5 @@
 ---
-name: bsjt-cloudinary-pdfs
+name: bsjt-storage
 description: >-
   Imágenes (portadas/avatars) en Cloudinary y PDFs en Supabase Storage.
   Usar al tocar upload de libros, proxy PDF, signed URL, configs/cloudinary o configs/supabase.

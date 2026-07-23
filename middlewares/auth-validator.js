@@ -1,11 +1,12 @@
 import { check } from 'express-validator';
 import { validarCampos } from './validate-values.js';
-import { emailExists } from '../helpers/db-validators.js';
+import { emailExists, usernameExists } from '../helpers/db-validators.js';
 
 export const registerValidator = [
   check('name', 'El nombre es obligatorio').trim().escape().not().isEmpty(),
   check('surname', 'El apellido es obligatorio').trim().escape().not().isEmpty(),
   check('username', 'El nombre de usuario es obligatorio').trim().not().isEmpty(),
+  check('username').custom(usernameExists),
   check('email', 'No es un email válido').trim().isEmail(),
   check('email').custom(emailExists),
   check('password', 'La contraseña debe de tener al menos 8 caracteres').isLength({

@@ -23,28 +23,28 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 
 ## Users — `/api/users`
 
-| Método | Path                       | Auth  | Notas                      |
-| ------ | -------------------------- | ----- | -------------------------- |
-| GET    | `/`                        | JWT   | Lista usuarios activos     |
-| GET    | `/me`                      | JWT   | Perfil actual              |
-| PUT    | `/update`                  | JWT   | Perfil ± `profilePicture`  |
-| PATCH  | `/update-password`         | JWT   | Cambio password            |
-| PATCH  | `/promote/:id`             | Admin | → `ADMIN_ROLE`             |
-| DELETE | `/delete/:id`              | JWT   | Propietario o admin        |
-| POST   | `/toggle-favorite/:bookId` | JWT   |                            |
-| GET    | `/favorites`               | JWT   | Libros populados           |
-| PATCH  | `/reading-progress`        | JWT   | Body: `{ book, lastPage }` |
+| Método | Path                       | Auth  | Notas                     |
+| ------ | -------------------------- | ----- | ------------------------- |
+| GET    | `/`                        | JWT   | Lista usuarios activos    |
+| GET    | `/me`                      | JWT   | Perfil actual             |
+| PUT    | `/update`                  | JWT   | Perfil ± `profilePicture` |
+| PATCH  | `/update-password`         | JWT   | Cambio password           |
+| PATCH  | `/promote/:id`             | Admin | → `ADMIN_ROLE`            |
+| DELETE | `/delete/:id`              | JWT   | Propietario o admin       |
+| POST   | `/toggle-favorite/:bookId` | JWT   |                           |
+| GET    | `/favorites`               | JWT   | Libros populados          |
+| PATCH  | `/reading-progress`        | JWT   | Body: `{ bookId, page }`  |
 
 ## Books — `/api/books`
 
-| Método | Path              | Auth      | Notas                     |
-| ------ | ----------------- | --------- | ------------------------- |
-| GET    | `/`               | JWT       | Filtros + paginación      |
-| GET    | `/:id`            | JWT       | Detalle                   |
-| POST   | `/`               | Admin     | Multipart: `pdf`, `cover` |
-| DELETE | `/:id`            | Admin     | Borra DB + Cloudinary     |
-| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF          |
-| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`           |
+| Método | Path              | Auth      | Notas                                               |
+| ------ | ----------------- | --------- | --------------------------------------------------- |
+| GET    | `/`               | JWT       | Filtros + paginación                                |
+| GET    | `/:id`            | JWT       | Detalle                                             |
+| POST   | `/`               | Admin     | Multipart: `pdf`, `cover`                           |
+| DELETE | `/:id`            | Admin     | Borra DB + PDF (Supabase/legacy) + cover Cloudinary |
+| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF                                    |
+| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`                                     |
 
 Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl` (legacy HTTP opcional), `pdfPublicId` (path Supabase o id legacy), `coverUrl`, `coverPublicId`, `uploadedBy`.
 
@@ -74,7 +74,7 @@ PDFs: **Supabase Storage**. Portadas: **Cloudinary**. Ver [STORAGE-SUPABASE.md](
 
 ## Estáticos
 
-Ya no hay montajes `/api/pdfs` ni `/api/uploads`. PDFs vía Cloudinary (`/books/:id/pdf` proxy o `signed-url`). Avatares = URL Cloudinary en `profilePicture`.
+Ya no hay montajes `/api/pdfs` ni `/api/uploads`. PDFs vía **Supabase** (`/books/:id/pdf` proxy o `signed-url`; dual-path HTTP legacy si `pdfUrl` es URL). Avatares = URL Cloudinary en `profilePicture`.
 
 ---
 

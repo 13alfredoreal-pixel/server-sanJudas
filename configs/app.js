@@ -52,10 +52,23 @@ export const initServer = async () => {
     applyRoutes(app);
     app.use(handleErrors);
 
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on port: ${process.env.PORT}`);
+    const port = process.env.PORT;
+    const server = app.listen(port, () => {
+      console.log(`Server running on port: ${port}`);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(
+          `CRÍTICO | El puerto ${port} ya está en uso. Mata el proceso anterior (ej. fuser -k ${port}/tcp) y vuelve a correr pnpm dev.`,
+        );
+      } else {
+        console.error(`CRÍTICO | Error del servidor HTTP: ${err.message}`);
+      }
+      process.exit(1);
     });
   } catch (error) {
     console.error(`CRÍTICO | No se pudo iniciar el servidor: ${error.message}`);
+    process.exit(1);
   }
 };
