@@ -1,7 +1,7 @@
 import User from '../users/user.model.js';
 import { hash, verify } from 'argon2';
 import jwt from 'jsonwebtoken';
-import { generarJWT, generarRefreshJWT } from '../../helpers/jwt-generate.js';
+import { generarJWT, generarRefreshJWT, getRefreshSecret } from '../../helpers/jwt-generate.js';
 
 const REFRESH_COOKIE = {
   httpOnly: true,
@@ -84,7 +84,7 @@ export const refreshToken = async (req, res) => {
     }
 
     const decoded = await new Promise((resolve, reject) => {
-      jwt.verify(token, process.env.REFRESH_TOKEN_KEY || process.env.TOKEN_KEY, (err, payload) => {
+      jwt.verify(token, getRefreshSecret(), (err, payload) => {
         if (err) reject(err);
         else resolve(payload);
       });

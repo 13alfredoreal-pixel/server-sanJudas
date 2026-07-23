@@ -1,35 +1,40 @@
 import jwt from 'jsonwebtoken';
 
-export const generarJWT = (uid = '', email = '') => {
-  return new Promise((resolve, reject) => {
-    const payload = { uid, email };
+const getAccessSecret = () => {
+  const secret = process.env.TOKEN_KEY;
+  if (!secret) throw new Error('TOKEN_KEY no está definido en .env');
+  return secret;
+};
+
+const getRefreshSecret = () => {
+  const secret = process.env.REFRESH_TOKEN_KEY || process.env.TOKEN_KEY;
+  if (!secret) throw new Error('REFRESH_TOKEN_KEY (o TOKEN_KEY) no está definido en .env');
+  return secret;
+};
+
+export const generarJWT = (uid = '', email = '') =>
+  new Promise((resolve, reject) => {
     jwt.sign(
-      payload,
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: '15m', // Tiempo de vida corto para seguridad
-      },
+      { uid, email },
+      getAccessSecret(),
+      { expiresIn: '15m' },
       (err, token) => {
         if (err) {
           console.error(err);
-          reject('Error al generar token: ' + err.message);
+          reject(`Error al generar token: ${err.message}`);
         } else {
           resolve(token);
         }
       },
     );
   });
-};
 
-export const generarRefreshJWT = (uid = '') => {
-  return new Promise((resolve, reject) => {
-    const payload = { uid };
+export const generarRefreshJWT = (uid = '') =>
+  new Promise((resolve, reject) => {
     jwt.sign(
-      payload,
-      process.env.REFRESH_TOKEN_KEY || process.env.TOKEN_KEY, // Idealmente una clave secreta separada
-      {
-        expiresIn: '7d', // Refresh token dura 7 días
-      },
+      { uid },
+      getRefreshSecret(),
+      { expiresIn: '7d' },
       (err, token) => {
         if (err) {
           console.error(err);
@@ -40,4 +45,5 @@ export const generarRefreshJWT = (uid = '') => {
       },
     );
   });
-};
+
+export { getAccessSecret, getRefreshSecret };
