@@ -32,9 +32,7 @@ export const getBooks = async (req, res) => {
     const limitNumber = parseInt(limit, 10);
     const skip = (pageNumber - 1) * limitNumber;
 
-    const query = Book.find(filter)
-      .populate('uploadedBy', 'name surname')
-      .sort({ createdAt: -1 });
+    const query = Book.find(filter).populate('uploadedBy', 'name surname').sort({ createdAt: -1 });
 
     if (limitNumber > 0) {
       query.skip(skip).limit(limitNumber);
@@ -92,14 +90,21 @@ export const uploadBook = async (req, res) => {
     if (!isActuallyPdf && !isReportedAsPdf) {
       return res.status(400).json({
         message: 'El archivo proporcionado no es un PDF válido.',
-        details: pdfType ? `Detectado como: ${pdfType.mime}` : 'No se pudo verificar la firma digital del archivo',
+        details: pdfType
+          ? `Detectado como: ${pdfType.mime}`
+          : 'No se pudo verificar la firma digital del archivo',
       });
     }
 
     if (coverFile) {
       const coverType = await fileTypeFromBuffer(coverFile.buffer);
-      if ((!coverType || !coverType.mime.startsWith('image/')) && !coverFile.mimetype.startsWith('image/')) {
-        return res.status(400).json({ message: 'La imagen de portada es inválida o tiene un formato no permitido.' });
+      if (
+        (!coverType || !coverType.mime.startsWith('image/')) &&
+        !coverFile.mimetype.startsWith('image/')
+      ) {
+        return res
+          .status(400)
+          .json({ message: 'La imagen de portada es inválida o tiene un formato no permitido.' });
       }
     }
 
@@ -155,9 +160,13 @@ export const uploadBook = async (req, res) => {
   } catch (error) {
     console.error('[BOOK UPLOAD ERROR]', error);
     if (error.name === 'ValidationError') {
-      return res.status(400).json({ message: 'Error de validación en los datos del libro', error: error.message });
+      return res
+        .status(400)
+        .json({ message: 'Error de validación en los datos del libro', error: error.message });
     }
-    return res.status(500).json({ message: 'Error interno al subir el libro', error: error.message });
+    return res
+      .status(500)
+      .json({ message: 'Error interno al subir el libro', error: error.message });
   }
 };
 
@@ -204,7 +213,10 @@ export const servePdf = async (req, res) => {
     }
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename="${book.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`);
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename="${book.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`,
+    );
     res.setHeader('Cache-Control', 'public, max-age=3600');
 
     const response = await axios.get(book.pdfUrl, {

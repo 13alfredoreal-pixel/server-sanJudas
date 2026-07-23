@@ -1,6 +1,6 @@
 name: Feature
 description: Nueva funcionalidad o mejora de producto (API)
-title: "[BSJT-???] "
+title: '[BSJT-???] '
 labels:
   - feature
 body:

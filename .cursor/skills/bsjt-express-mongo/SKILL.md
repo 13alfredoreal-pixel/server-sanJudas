@@ -10,14 +10,14 @@ description: >-
 
 ## Módulos existentes
 
-| Prefijo | Carpeta |
-|---------|---------|
-| `/api/auth` | `src/auth/` |
-| `/api/users` | `src/users/` |
-| `/api/books` | `src/books/` |
+| Prefijo           | Carpeta           |
+| ----------------- | ----------------- |
+| `/api/auth`       | `src/auth/`       |
+| `/api/users`      | `src/users/`      |
+| `/api/books`      | `src/books/`      |
 | `/api/categories` | `src/categories/` |
-| `/api/reviews` | `src/reviews/` |
-| `/api/analytics` | `src/analytics/` |
+| `/api/reviews`    | `src/reviews/`    |
+| `/api/analytics`  | `src/analytics/`  |
 
 Audit: `src/audit/` (logger, no router propio).
 

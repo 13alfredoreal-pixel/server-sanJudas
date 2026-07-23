@@ -8,15 +8,15 @@ import AuditLog from './audit.model.js';
  * @param {string} ipAddress - La dirección IP (puede obtenerse de req.ip).
  */
 export const logAdminAction = async (adminId, action, details, ipAddress = '') => {
-    try {
-        await AuditLog.create({
-            adminId,
-            action,
-            details,
-            ipAddress
-        });
-    } catch (error) {
-        console.error('[Audit Logger Error]', error);
-        // No lanzamos el error para no interrumpir el flujo principal del request
-    }
+  try {
+    await AuditLog.create({
+      adminId,
+      action,
+      details,
+      ipAddress,
+    });
+  } catch (error) {
+    console.error('[Audit Logger Error]', error);
+    // No lanzamos el error para no interrumpir el flujo principal del request
+  }
 };

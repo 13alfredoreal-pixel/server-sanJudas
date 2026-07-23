@@ -1,10 +1,9 @@
-import User from '../src/users/user.model.js'
+import User from '../src/users/user.model.js';
 
 export const emailExists = async (email = '') => {
-    const existe = await User.findOne({ email })
+  const existe = await User.findOne({ email });
 
-    if (existe) {
-        throw new Error('El email ya está registrado')
-    }
-}
-
+  if (existe) {
+    throw new Error('El email ya está registrado');
+  }
+};

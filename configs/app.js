@@ -16,10 +16,12 @@ import { handleErrors } from '../middlewares/handle-errors.js';
 import { corsMiddleware } from '../middlewares/cors.config.js';
 
 const applyMiddlewares = (app) => {
-  app.use(helmet({
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-    crossOriginEmbedderPolicy: false,
-  }));
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
   app.use(morgan('dev'));
   app.use(corsMiddleware);
   app.use(express.json({ limit: '100mb' }));

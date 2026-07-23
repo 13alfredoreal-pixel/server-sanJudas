@@ -1,5 +1,5 @@
-import "dotenv/config";
-import dns from "node:dns";
+import 'dotenv/config';
+import dns from 'node:dns';
 import { initServer } from './configs/app.js';
 
 // Configuración de DNS para resolver problemas de querySrv ECONNREFUSED en Atlas

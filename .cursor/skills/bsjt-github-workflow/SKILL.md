@@ -9,11 +9,11 @@ description: >-
 
 ## Nomenclatura
 
-| Elemento | Formato | Ejemplo |
-|----------|---------|---------|
-| Issue | `[BSJT-012] Título` | `[BSJT-012] Books: signed URL TTL` |
-| Rama | `BSJT-012` | solo el ID |
-| PR | `[BSJT-012] …` + `Closes #12` | #12 = número GitHub |
+| Elemento | Formato                       | Ejemplo                            |
+| -------- | ----------------------------- | ---------------------------------- |
+| Issue    | `[BSJT-012] Título`           | `[BSJT-012] Books: signed URL TTL` |
+| Rama     | `BSJT-012`                    | solo el ID                         |
+| PR       | `[BSJT-012] …` + `Closes #12` | #12 = número GitHub                |
 
 Label sugerido: `repo:server` (si el org Project es compartido).
 

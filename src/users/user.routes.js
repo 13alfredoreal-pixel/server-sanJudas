@@ -1,10 +1,20 @@
-import { Router } from "express";
-import { updateProfile, updatePassword, getUsers, promoteToAdmin, toggleFavorite, getFavorites, deleteUser, updateReadingProgress, getProfile } from "./user.controller.js";
-import { validateJWT } from "../../middlewares/jwt-verify.js";
-import { uploadProfilePicture } from "../../middlewares/file-uploader.js";
-import { processFileUpload } from "../../middlewares/process-file-upload.js";
-import { isAdmin } from "../../middlewares/is-admin.js";
-import { authenticatedLimiter } from "../../middlewares/request-limit.js";
+import { Router } from 'express';
+import {
+  updateProfile,
+  updatePassword,
+  getUsers,
+  promoteToAdmin,
+  toggleFavorite,
+  getFavorites,
+  deleteUser,
+  updateReadingProgress,
+  getProfile,
+} from './user.controller.js';
+import { validateJWT } from '../../middlewares/jwt-verify.js';
+import { uploadProfilePicture } from '../../middlewares/file-uploader.js';
+import { processFileUpload } from '../../middlewares/process-file-upload.js';
+import { isAdmin } from '../../middlewares/is-admin.js';
+import { authenticatedLimiter } from '../../middlewares/request-limit.js';
 
 const router = Router();
 
@@ -14,7 +24,7 @@ const router = Router();
  * Destino: getUsers (user.controller.js)
  * Retorno: JSON con éxito y array de usuarios básicos (nombre, foto).
  */
-router.get("/", authenticatedLimiter, validateJWT, getUsers);
+router.get('/', authenticatedLimiter, validateJWT, getUsers);
 
 /**
  * RUTA: GET /me
@@ -22,7 +32,7 @@ router.get("/", authenticatedLimiter, validateJWT, getUsers);
  * Destino: getProfile (user.controller.js)
  * Retorno: JSON con los datos públicos del usuario.
  */
-router.get("/me", authenticatedLimiter, validateJWT, getProfile);
+router.get('/me', authenticatedLimiter, validateJWT, getProfile);
 
 /**
  * RUTA: PUT /update
@@ -31,12 +41,12 @@ router.get("/me", authenticatedLimiter, validateJWT, getProfile);
  * Retorno: JSON con éxito, mensaje y los datos del usuario actualizados.
  */
 router.put(
-    "/update",
-    authenticatedLimiter,
-    validateJWT,
-    uploadProfilePicture.single("profilePicture"),
-    processFileUpload,
-    updateProfile
+  '/update',
+  authenticatedLimiter,
+  validateJWT,
+  uploadProfilePicture.single('profilePicture'),
+  processFileUpload,
+  updateProfile,
 );
 
 /**
@@ -45,12 +55,7 @@ router.put(
  * Destino: updatePassword (user.controller.js)
  * Retorno: JSON con mensaje de éxito.
  */
-router.patch(
-    "/update-password",
-    authenticatedLimiter,
-    validateJWT,
-    updatePassword
-);
+router.patch('/update-password', authenticatedLimiter, validateJWT, updatePassword);
 
 /**
  * RUTA: PATCH /promote/:id
@@ -58,13 +63,7 @@ router.patch(
  * Destino: promoteToAdmin (user.controller.js) - Solo Admin
  * Retorno: JSON con éxito y datos del usuario promovido.
  */
-router.patch(
-    "/promote/:id",
-    authenticatedLimiter,
-    validateJWT,
-    isAdmin,
-    promoteToAdmin
-);
+router.patch('/promote/:id', authenticatedLimiter, validateJWT, isAdmin, promoteToAdmin);
 
 /**
  * RUTA: DELETE /delete/:id
@@ -72,12 +71,7 @@ router.patch(
  * Destino: deleteUser (user.controller.js) - Propietario o Admin
  * Retorno: JSON con mensaje de éxito.
  */
-router.delete(
-    "/delete/:id",
-    authenticatedLimiter,
-    validateJWT,
-    deleteUser
-);
+router.delete('/delete/:id', authenticatedLimiter, validateJWT, deleteUser);
 
 /**
  * RUTA: POST /toggle-favorite/:bookId
@@ -85,7 +79,7 @@ router.delete(
  * Destino: toggleFavorite (user.controller.js)
  * Retorno: JSON con éxito y la lista actualizada de IDs favoritos.
  */
-router.post("/toggle-favorite/:bookId", authenticatedLimiter, validateJWT, toggleFavorite);
+router.post('/toggle-favorite/:bookId', authenticatedLimiter, validateJWT, toggleFavorite);
 
 /**
  * RUTA: GET /favorites
@@ -93,7 +87,7 @@ router.post("/toggle-favorite/:bookId", authenticatedLimiter, validateJWT, toggl
  * Destino: getFavorites (user.controller.js)
  * Retorno: JSON con el array de libros favoritos (populados).
  */
-router.get("/favorites", authenticatedLimiter, validateJWT, getFavorites);
+router.get('/favorites', authenticatedLimiter, validateJWT, getFavorites);
 
 /**
  * RUTA: PATCH /reading-progress
@@ -101,6 +95,6 @@ router.get("/favorites", authenticatedLimiter, validateJWT, getFavorites);
  * Destino: updateReadingProgress (user.controller.js)
  * Retorno: JSON con mensaje confirmando el guardado del progreso.
  */
-router.patch("/reading-progress", authenticatedLimiter, validateJWT, updateReadingProgress);
+router.patch('/reading-progress', authenticatedLimiter, validateJWT, updateReadingProgress);
 
 export default router;

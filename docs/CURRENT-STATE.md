@@ -17,14 +17,14 @@ pnpm-workspace.yaml   # onlyBuiltDependencies: argon2
 
 ## Módulos API
 
-| Prefijo | Carpeta |
-|---------|---------|
-| `/api/auth` | `src/auth/` |
-| `/api/users` | `src/users/` |
-| `/api/books` | `src/books/` |
+| Prefijo           | Carpeta           |
+| ----------------- | ----------------- |
+| `/api/auth`       | `src/auth/`       |
+| `/api/users`      | `src/users/`      |
+| `/api/books`      | `src/books/`      |
 | `/api/categories` | `src/categories/` |
-| `/api/reviews` | `src/reviews/` |
-| `/api/analytics` | `src/analytics/` |
+| `/api/reviews`    | `src/reviews/`    |
+| `/api/analytics`  | `src/analytics/`  |
 
 Audit: `src/audit/` (logger, sin router).
 
@@ -35,6 +35,12 @@ Audit: `src/audit/` (logger, sin router).
 - `firebase-admin`, `express-mongo-sanitize`
 - `package-lock.json` / npm — ahora **pnpm**
 - Carpeta `src/` → `src/`
+
+## Tooling (BSJT-005)
+
+- ESLint (`eslint.config.js`) + Prettier (`.prettierrc.json`)
+- Husky: `pre-commit` → lint-staged; `commit-msg` → commitlint (Conventional Commits)
+- CI: `pnpm lint` + `pnpm format:check`
 
 ## Invariantes
 

@@ -14,61 +14,61 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 
 ## Auth — `/api/auth`
 
-| Método | Path | Auth | Descripción |
-|--------|------|------|-------------|
-| POST | `/register` | No | Multipart opcional `profilePicture` |
-| POST | `/login` | No | Rate-limited; setea refresh cookie |
-| POST | `/refresh-token` | Cookie | Nuevo access token |
-| POST | `/logout` | Cookie | Limpia sesión |
+| Método | Path             | Auth   | Descripción                         |
+| ------ | ---------------- | ------ | ----------------------------------- |
+| POST   | `/register`      | No     | Multipart opcional `profilePicture` |
+| POST   | `/login`         | No     | Rate-limited; setea refresh cookie  |
+| POST   | `/refresh-token` | Cookie | Nuevo access token                  |
+| POST   | `/logout`        | Cookie | Limpia sesión                       |
 
 ## Users — `/api/users`
 
-| Método | Path | Auth | Notas |
-|--------|------|------|-------|
-| GET | `/` | JWT | Lista usuarios activos |
-| GET | `/me` | JWT | Perfil actual |
-| PUT | `/update` | JWT | Perfil ± `profilePicture` |
-| PATCH | `/update-password` | JWT | Cambio password |
-| PATCH | `/promote/:id` | Admin | → `ADMIN_ROLE` |
-| DELETE | `/delete/:id` | JWT | Propietario o admin |
-| POST | `/toggle-favorite/:bookId` | JWT | |
-| GET | `/favorites` | JWT | Libros populados |
-| PATCH | `/reading-progress` | JWT | Body: `{ book, lastPage }` |
+| Método | Path                       | Auth  | Notas                      |
+| ------ | -------------------------- | ----- | -------------------------- |
+| GET    | `/`                        | JWT   | Lista usuarios activos     |
+| GET    | `/me`                      | JWT   | Perfil actual              |
+| PUT    | `/update`                  | JWT   | Perfil ± `profilePicture`  |
+| PATCH  | `/update-password`         | JWT   | Cambio password            |
+| PATCH  | `/promote/:id`             | Admin | → `ADMIN_ROLE`             |
+| DELETE | `/delete/:id`              | JWT   | Propietario o admin        |
+| POST   | `/toggle-favorite/:bookId` | JWT   |                            |
+| GET    | `/favorites`               | JWT   | Libros populados           |
+| PATCH  | `/reading-progress`        | JWT   | Body: `{ book, lastPage }` |
 
 ## Books — `/api/books`
 
-| Método | Path | Auth | Notas |
-|--------|------|------|-------|
-| GET | `/` | JWT | Filtros + paginación |
-| GET | `/:id` | JWT | Detalle |
-| POST | `/` | Admin | Multipart: `pdf`, `cover` |
-| DELETE | `/:id` | Admin | Borra DB + Cloudinary |
-| GET | `/:id/pdf` | Ver impl. | Proxy stream PDF |
-| GET | `/:id/signed-url` | JWT | `{ signedUrl }` |
+| Método | Path              | Auth      | Notas                     |
+| ------ | ----------------- | --------- | ------------------------- |
+| GET    | `/`               | JWT       | Filtros + paginación      |
+| GET    | `/:id`            | JWT       | Detalle                   |
+| POST   | `/`               | Admin     | Multipart: `pdf`, `cover` |
+| DELETE | `/:id`            | Admin     | Borra DB + Cloudinary     |
+| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF          |
+| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`           |
 
 Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl`, `pdfPublicId`, `coverUrl`, `coverPublicId`, `uploadedBy`.
 
 ## Categories — `/api/categories`
 
-| Método | Path | Auth |
-|--------|------|------|
-| GET | `/` | JWT |
-| POST | `/` | Admin |
+| Método | Path   | Auth  |
+| ------ | ------ | ----- |
+| GET    | `/`    | JWT   |
+| POST   | `/`    | Admin |
 | DELETE | `/:id` | Admin |
 
 ## Reviews — `/api/reviews`
 
-| Método | Path | Auth |
-|--------|------|------|
-| POST | `/` | JWT |
-| GET | `/book/:bookId` | JWT |
-| DELETE | `/:id` | JWT (autor o admin) |
+| Método | Path            | Auth                |
+| ------ | --------------- | ------------------- |
+| POST   | `/`             | JWT                 |
+| GET    | `/book/:bookId` | JWT                 |
+| DELETE | `/:id`          | JWT (autor o admin) |
 
 ## Analytics — `/api/analytics`
 
-| Método | Path | Auth |
-|--------|------|------|
-| GET | `/` | Admin | Contadores, top reviewed, recent users |
+| Método | Path | Auth  |
+| ------ | ---- | ----- |
+| GET    | `/`  | Admin | Contadores, top reviewed, recent users |
 
 ## Estáticos
 

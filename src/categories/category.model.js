@@ -1,19 +1,22 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model } from 'mongoose';
 
-const categorySchema = new Schema({
+const categorySchema = new Schema(
+  {
     name: {
-        type: String,
-        required: [true, 'El nombre es obligatorio'],
-        trim: true,
-        unique: true
+      type: String,
+      required: [true, 'El nombre es obligatorio'],
+      trim: true,
+      unique: true,
     },
     icon: {
-        type: String,
-        default: '📄'
-    }
-}, {
+      type: String,
+      default: '📄',
+    },
+  },
+  {
     timestamps: true,
-    versionKey: false
-})
+    versionKey: false,
+  },
+);
 
-export default model('Category', categorySchema)
+export default model('Category', categorySchema);

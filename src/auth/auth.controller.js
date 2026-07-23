@@ -101,7 +101,9 @@ export const refreshToken = async (req, res) => {
       token: newAccessToken,
     });
   } catch {
-    return res.status(403).json({ message: 'Sesión expirada o inválida. Inicie sesión nuevamente.' });
+    return res
+      .status(403)
+      .json({ message: 'Sesión expirada o inválida. Inicie sesión nuevamente.' });
   }
 };
 

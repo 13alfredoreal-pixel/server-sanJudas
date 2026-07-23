@@ -2,12 +2,12 @@
 
 Backend REST de la biblioteca digital institucional **San Judas Tadeo**.
 
-| | |
-|--|--|
+|                  |                                                                           |
+| ---------------- | ------------------------------------------------------------------------- |
 | Frontend hermano | [client-sanjudas](https://github.com/13alfredoreal-pixel/client-sanjudas) |
-| Agentes | [AGENTS.md](./AGENTS.md) |
-| Contrato API | [docs/API-CONTRACT.md](./docs/API-CONTRACT.md) |
-| Estado as-is | [docs/CURRENT-STATE.md](./docs/CURRENT-STATE.md) |
+| Agentes          | [AGENTS.md](./AGENTS.md)                                                  |
+| Contrato API     | [docs/API-CONTRACT.md](./docs/API-CONTRACT.md)                            |
+| Estado as-is     | [docs/CURRENT-STATE.md](./docs/CURRENT-STATE.md)                          |
 
 **Dos repos independientes** (no monorepo). Clonar ambos si desarrollas full-stack:
 
@@ -16,10 +16,10 @@ git clone https://github.com/13alfredoreal-pixel/server-sanJudas.git
 git clone https://github.com/13alfredoreal-pixel/client-sanjudas.git
 ```
 
-| Capa | URL prod |
-|------|----------|
+| Capa            | URL prod                          |
+| --------------- | --------------------------------- |
 | API (este repo) | https://base-rho-lyart.vercel.app |
-| SPA | https://biblioteca-sjt.web.app |
+| SPA             | https://biblioteca-sjt.web.app    |
 
 ## Stack
 
@@ -49,11 +49,11 @@ En otra terminal, arranca el client (`pnpm  dev` en client-sanjudas) si necesita
 
 ## Scripts
 
-| Comando | Descripción |
-|---------|-------------|
-| `pnpm  dev` | Nodemon |
-| `npm start` | Node producción |
-| `npm test` | Placeholder (sin suite aún) |
+| Comando     | Descripción                 |
+| ----------- | --------------------------- |
+| `pnpm  dev` | Nodemon                     |
+| `npm start` | Node producción             |
+| `npm test`  | Placeholder (sin suite aún) |
 
 ## Variables de entorno
 

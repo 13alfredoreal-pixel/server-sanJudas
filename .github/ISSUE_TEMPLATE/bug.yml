@@ -1,6 +1,6 @@
 name: Bug
 description: Comportamiento incorrecto o error (API)
-title: "[BSJT-???] "
+title: '[BSJT-???] '
 labels:
   - bug
 body:

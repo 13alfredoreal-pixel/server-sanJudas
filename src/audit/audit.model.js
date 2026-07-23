@@ -1,27 +1,37 @@
 import { Schema, model } from 'mongoose';
 
-const auditLogSchema = new Schema({
+const auditLogSchema = new Schema(
+  {
     adminId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     action: {
-        type: String,
-        required: true,
-        enum: ['CREATE_BOOK', 'DELETE_BOOK', 'PROMOTE_USER', 'DELETE_USER', 'CREATE_CATEGORY', 'DELETE_CATEGORY']
+      type: String,
+      required: true,
+      enum: [
+        'CREATE_BOOK',
+        'DELETE_BOOK',
+        'PROMOTE_USER',
+        'DELETE_USER',
+        'CREATE_CATEGORY',
+        'DELETE_CATEGORY',
+      ],
     },
     details: {
-        type: String,
-        default: ''
+      type: String,
+      default: '',
     },
     ipAddress: {
-        type: String,
-        default: ''
-    }
-}, {
+      type: String,
+      default: '',
+    },
+  },
+  {
     timestamps: true,
-    versionKey: false
-});
+    versionKey: false,
+  },
+);
 
 export default model('AuditLog', auditLogSchema);

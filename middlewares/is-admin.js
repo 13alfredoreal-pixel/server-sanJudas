@@ -1,4 +1,4 @@
-import User from '../src/users/user.model.js'
+import User from '../src/users/user.model.js';
 
 /**
  * Middleware isAdmin:
@@ -6,17 +6,17 @@ import User from '../src/users/user.model.js'
  * Debe usarse DESPUÉS de validateJWT.
  */
 export const isAdmin = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.uid)
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' })
-        }
-        if (user.role !== 'ADMIN_ROLE') {
-            return res.status(403).json({ message: 'Acceso denegado: se requiere rol de administrador' })
-        }
-        req.user = user
-        next()
-    } catch (error) {
-        return res.status(500).json({ message: 'Error al verificar permisos', error: error.message })
+  try {
+    const user = await User.findById(req.uid);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
     }
-}
+    if (user.role !== 'ADMIN_ROLE') {
+      return res.status(403).json({ message: 'Acceso denegado: se requiere rol de administrador' });
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al verificar permisos', error: error.message });
+  }
+};
