@@ -13,7 +13,7 @@
     { "key": "reviewId", "value": "" },
     { "key": "userId", "value": "" },
     { "key": "adminUsername", "value": "admin" },
-    { "key": "adminPassword", "value": "Admin123!" }
+    { "key": "adminPassword", "value": "" },
   ],
   "auth": {
     "type": "bearer",
@@ -215,7 +215,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"oldPassword\": \"{{adminPassword}}\",\n  \"newPassword\": \"Admin123!\"\n}"
+              "raw": "{\n  \"oldPassword\": \"{{adminPassword}}\",\n  \"newPassword\": \"{{adminPassword}}\"\n}"
             },
             "url": "{{baseUrl}}/users/update-password",
             "description": "Ajusta body según nombres exactos que espere el controller."

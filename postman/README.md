@@ -23,5 +23,5 @@
 
 - Cookies: Postman debe conservar cookies de `localhost` para refresh/logout.
 - Upload libro: campo `pdf` obligatorio; `cover` opcional.
-- Admin seed: `admin` / `Admin123!` (cambiar en prod).
+- Admin seed: username/email desde env (`ADMIN_USERNAME` / `ADMIN_EMAIL`); password = `ADMIN_PASSWORD` en `.env` del server (no hardcodeada). Ajusta `adminPassword` en el environment Postman al mismo valor.
 - Contrato: [`docs/API-CONTRACT.md`](../docs/API-CONTRACT.md)

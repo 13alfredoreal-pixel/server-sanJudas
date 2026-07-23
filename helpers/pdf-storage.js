@@ -50,6 +50,17 @@ export const downloadPdfObject = async (objectPath) => {
   return data;
 };
 
+/**
+ * Resuelve de dónde leer el PDF de un libro.
+ *
+ * Dual-path (transición):
+ * 1. `kind: 'http'` — legacy: `pdfUrl` es URL Cloudinary/HTTP absoluta.
+ * 2. `kind: 'supabase'` — actual: `pdfPublicId` es path en bucket (`pdfs/...pdf`).
+ * 3. `kind: 'none'` — sin archivo usable.
+ *
+ * Libros nuevos solo usan Supabase (`pdfUrl` vacío). No borrar el branch HTTP
+ * mientras existan documentos legacy en Mongo.
+ */
 export const resolvePdfSource = (book) => {
   if (isHttpUrl(book.pdfUrl)) {
     return { kind: 'http', url: book.pdfUrl };

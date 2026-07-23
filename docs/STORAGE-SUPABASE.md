@@ -31,7 +31,9 @@ SUPABASE_PDF_BUCKET=biblioteca-pdfs
 | `GET /api/books/:id/pdf`        | Proxy stream (Supabase o HTTP legacy)                          |
 | `DELETE /api/books/:id`         | Borra PDF en Supabase (o Cloudinary legacy) + cover Cloudinary |
 
-Libros **antiguos** con `pdfUrl` https (Cloudinary) siguen leyéndose por proxy.
+Libros **antiguos** con `pdfUrl` https (Cloudinary) siguen leyéndose por proxy (`resolvePdfSource` → `kind: 'http'`).
+
+Libros **nuevos**: `pdfUrl` vacío; `pdfPublicId` = path Supabase. No migrar en masa salvo ticket explícito.
 
 ## Nota de seguridad
 

@@ -3,23 +3,25 @@
 ## Vista general
 
 ```
-Client (Firebase Hosting)
+Client (Firebase Hosting / Vite local)
     │  HTTPS + cookies
     ▼
-Express (Vercel)  ──►  MongoDB
+Express (Vercel / local)  ──►  MongoDB
     │
-    └──► Cloudinary (PDF + covers + avatars)
+    ├──► Supabase Storage (PDFs)
+    └──► Cloudinary (covers + avatars)
 ```
 
 ## Capas
 
-| Capa          | Responsabilidad                     | Ubicación               |
-| ------------- | ----------------------------------- | ----------------------- |
-| Bootstrap     | dotenv, DNS Atlas, listen           | `index.js`              |
-| App           | Helmet, CORS, parsers, mount routes | `configs/app.js`        |
-| Dominio       | Controllers + models + routes       | `src/<domain>/`         |
-| Cross-cutting | JWT, admin, validators, limits      | `middlewares/`          |
-| Storage       | Cloudinary SDK                      | `configs/cloudinary.js` |
+| Capa          | Responsabilidad                          | Ubicación                                       |
+| ------------- | ---------------------------------------- | ----------------------------------------------- |
+| Bootstrap     | dotenv, `validateEnv`, DNS Atlas, listen | `index.js`, `helpers/validate-env.js`           |
+| App           | Helmet, CORS, parsers, mount routes      | `configs/app.js`                                |
+| Dominio       | Controllers + models + routes            | `src/<domain>/`                                 |
+| Cross-cutting | JWT, admin, validators, limits           | `middlewares/`                                  |
+| Storage PDF   | Supabase SDK                             | `configs/supabase.js`, `helpers/pdf-storage.js` |
+| Storage img   | Cloudinary SDK                           | `configs/cloudinary.js`                         |
 
 ## Auth
 
@@ -27,6 +29,7 @@ Express (Vercel)  ──►  MongoDB
 2. Requests: `Authorization: Bearer <access>`.
 3. Expiración access → client llama `POST /api/auth/refresh-token` con cookie.
 4. Logout limpia cookie.
+5. Access y refresh usan secretos distintos (`TOKEN_KEY` / `REFRESH_TOKEN_KEY`).
 
 Passwords: Argon2. Roles en JWT/claims alineados con `User.role`.
 
@@ -41,9 +44,11 @@ Allowlist en `middlewares/cors.config.js`:
 
 ## Archivos
 
-- Upload libros: Multer fields `pdf` + `cover` → Cloudinary.
+- Upload libros: Multer 2 (memory) fields `pdf` + `cover`.
+- PDF → Supabase (`pdfPublicId` = path). Cover → Cloudinary.
 - Entrega: `GET /api/books/:id/pdf` (proxy) o `…/signed-url`.
-- Legacy estático: `/api/pdfs` (JWT), `/api/uploads`.
+- **Legacy:** si `pdfUrl` es `https://…` (Cloudinary antiguo), proxy/signed-url siguen funcionando (`resolvePdfSource`).
+- Sin montajes estáticos `/api/pdfs` ni `/api/uploads`.
 
 ## Errores
 

@@ -83,7 +83,7 @@ Ver [docs/GITHUB-WORKFLOW.md](docs/GITHUB-WORKFLOW.md) y [docs/CONTRIBUTING.md](
 
 `USER_ROLE` (default) | `ADMIN_ROLE` — enum en `src/users/user.model.js`.
 
-Admin seed: `src/users/user.seed.js` (`admin@sanjudas.edu.gt`).
+Admin seed: `src/users/user.seed.js` — solo si no hay `ADMIN_ROLE`; password desde `ADMIN_PASSWORD` en `.env` (nunca hardcodeada).
 
 ## Dominio
 
@@ -101,8 +101,8 @@ Libros PDF en **Supabase Storage**; portadas/avatares en **Cloudinary**; categor
 
 ## Índice Cursor
 
-| Tipo   | Path                                                                                                           |
-| ------ | -------------------------------------------------------------------------------------------------------------- |
-| Rules  | `.cursor/rules/bsjt-project.mdc`, `express-api.mdc`, `mongoose-models.mdc`                                     |
-| Skills | `.cursor/skills/bsjt-express-mongo/`, `bsjt-library-domain/`, `bsjt-cloudinary-pdfs/`, `bsjt-github-workflow/` |
-| Docs   | `docs/` (empezar por `CURRENT-STATE.md` + `API-CONTRACT.md`)                                                   |
+| Tipo   | Path                                                                                                   |
+| ------ | ------------------------------------------------------------------------------------------------------ |
+| Rules  | `.cursor/rules/bsjt-project.mdc`, `express-api.mdc`, `mongoose-models.mdc`                             |
+| Skills | `.cursor/skills/bsjt-express-mongo/`, `bsjt-library-domain/`, `bsjt-storage/`, `bsjt-github-workflow/` |
+| Docs   | `docs/` (empezar por `CURRENT-STATE.md` + `API-CONTRACT.md`)                                           |
