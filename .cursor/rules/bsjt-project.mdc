@@ -22,7 +22,7 @@ alwaysApply: true
 ## Dominio
 
 - Roles: `USER_ROLE` | `ADMIN_ROLE`.
-- PDFs/portadas en **Cloudinary** (`pdfUrl`/`pdfPublicId`, `coverUrl`/`coverPublicId`).
+- PDFs/portadas: PDF → **Supabase**; portadas/avatars → **Cloudinary** (`coverUrl`/`coverPublicId`, profile pics).
 - Auth: JWT Bearer + refresh cookie HttpOnly; passwords Argon2.
 - CORS allowlist: localhost:5173 + `biblioteca-sjt.web.app`.
 

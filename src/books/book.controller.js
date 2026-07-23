@@ -3,6 +3,14 @@ import cloudinary from '../../configs/cloudinary.js';
 import { fileTypeFromBuffer } from 'file-type';
 import { logAdminAction } from '../audit/audit.logger.js';
 import axios from 'axios';
+import { Readable } from 'node:stream';
+import {
+  uploadPdfBuffer,
+  removePdfObject,
+  createPdfSignedUrl,
+  downloadPdfObject,
+  resolvePdfSource,
+} from '../../helpers/pdf-storage.js';
 
 const uploadBufferToCloudinary = (buffer, options) =>
   new Promise((resolve, reject) => {
@@ -12,6 +20,10 @@ const uploadBufferToCloudinary = (buffer, options) =>
     });
     stream.end(buffer);
   });
+
+const isHttpUrl = (value = '') => /^https?:\/\//i.test(value);
+
+const bookHasPdf = (book) => Boolean(book.pdfPublicId) || isHttpUrl(book.pdfUrl);
 
 export const getBooks = async (req, res) => {
   try {
@@ -110,23 +122,19 @@ export const uploadBook = async (req, res) => {
 
     const timestamp = Date.now();
     const safeName = cleanTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const pdfPath = `pdfs/${safeName}_${timestamp}.pdf`;
 
-    const pdfResult = await uploadBufferToCloudinary(pdfFile.buffer, {
-      folder: 'biblioteca/pdfs',
-      resource_type: 'raw',
-      public_id: `${safeName}_${timestamp}`,
-      format: 'pdf',
-      use_filename: true,
-      unique_filename: true,
-      type: 'upload',
-      access_mode: 'public',
-      overwrite: true,
-      invalidate: true,
-    });
+    // PDF → Supabase Storage (blob; sin límite de páginas tipo Cloudinary)
+    const { path: storedPdfPath } = await uploadPdfBuffer(
+      pdfFile.buffer,
+      pdfPath,
+      pdfFile.mimetype || 'application/pdf',
+    );
 
     let coverUrl = '';
     let coverPublicId = '';
 
+    // Portada → Cloudinary (imagen)
     if (coverFile) {
       const coverResult = await uploadBufferToCloudinary(coverFile.buffer, {
         folder: 'biblioteca/portadas',
@@ -142,8 +150,9 @@ export const uploadBook = async (req, res) => {
       author: cleanAuthor,
       category: category && category.trim() !== '' ? category : 'Otros',
       description: description || '',
-      pdfUrl: pdfResult.secure_url,
-      pdfPublicId: pdfResult.public_id,
+      // pdfUrl vacío en libros nuevos; el acceso va por path (pdfPublicId) + signed/proxy
+      pdfUrl: '',
+      pdfPublicId: storedPdfPath,
       coverUrl,
       coverPublicId,
       uploadedBy: req.uid || req.user?._id,
@@ -152,7 +161,7 @@ export const uploadBook = async (req, res) => {
     await logAdminAction(
       req.uid || req.user?._id,
       'CREATE_BOOK',
-      `Libro subido: ${cleanTitle} (${pdfResult.public_id})`,
+      `Libro subido: ${cleanTitle} (${storedPdfPath})`,
       req.ip,
     );
 
@@ -177,11 +186,15 @@ export const deleteBook = async (req, res) => {
       return res.status(404).json({ message: 'Libro no encontrado' });
     }
 
-    if (book.pdfPublicId) {
+    const source = resolvePdfSource(book);
+    if (source.kind === 'supabase') {
+      await removePdfObject(source.path);
+    } else if (source.kind === 'http' && book.pdfPublicId) {
+      // Legacy Cloudinary raw PDF
       try {
         await cloudinary.uploader.destroy(book.pdfPublicId, { resource_type: 'raw' });
       } catch (e) {
-        console.log(`[Delete] Could not delete PDF from Cloudinary: ${e.message}`);
+        console.log(`[Delete] Could not delete legacy PDF from Cloudinary: ${e.message}`);
       }
     }
 
@@ -205,11 +218,10 @@ export const deleteBook = async (req, res) => {
 export const servePdf = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    if (!book) {
-      return res.status(404).json({ message: 'Libro no encontrado' });
-    }
-    if (!book.pdfUrl) {
-      return res.status(404).json({ message: 'Este libro no tiene PDF' });
+    if (!book || !bookHasPdf(book)) {
+      return res
+        .status(404)
+        .json({ message: book ? 'Este libro no tiene PDF' : 'Libro no encontrado' });
     }
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -217,24 +229,38 @@ export const servePdf = async (req, res) => {
       'Content-Disposition',
       `inline; filename="${book.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`,
     );
-    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.setHeader('Cache-Control', 'private, max-age=300');
 
-    const response = await axios.get(book.pdfUrl, {
-      responseType: 'stream',
-      timeout: 30000,
-    });
+    const source = resolvePdfSource(book);
 
-    response.data.pipe(res);
-    response.data.on('error', (error) => {
-      console.error('[PDF Proxy Stream Error]', error);
-      if (!res.headersSent) {
-        res.status(500).json({ message: 'Error al transmitir el PDF', error: error.message });
-      }
-    });
+    if (source.kind === 'http') {
+      const response = await axios.get(source.url, {
+        responseType: 'stream',
+        timeout: 60000,
+      });
+      response.data.pipe(res);
+      response.data.on('error', (error) => {
+        console.error('[PDF Proxy Stream Error]', error);
+        if (!res.headersSent) {
+          res.status(500).json({ message: 'Error al transmitir el PDF', error: error.message });
+        }
+      });
+      return;
+    }
+
+    if (source.kind === 'supabase') {
+      const blob = await downloadPdfObject(source.path);
+      const buffer = Buffer.from(await blob.arrayBuffer());
+      const stream = Readable.from(buffer);
+      stream.pipe(res);
+      return;
+    }
+
+    return res.status(404).json({ message: 'Este libro no tiene PDF' });
   } catch (error) {
     console.error('[PDF Proxy Error]', error.message);
     if (error.code === 'ECONNABORTED') {
-      return res.status(504).json({ message: 'Timeout al conectar con Cloudinary' });
+      return res.status(504).json({ message: 'Timeout al obtener el PDF' });
     }
     return res.status(500).json({ message: 'Error al obtener el PDF', error: error.message });
   }
@@ -243,13 +269,24 @@ export const servePdf = async (req, res) => {
 export const getPdfSignedUrl = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    if (!book) {
-      return res.status(404).json({ message: 'Libro no encontrado' });
+    if (!book || !bookHasPdf(book)) {
+      return res
+        .status(404)
+        .json({ message: book ? 'Este libro no tiene PDF' : 'Libro no encontrado' });
     }
-    if (!book.pdfUrl) {
-      return res.status(404).json({ message: 'Este libro no tiene PDF' });
+
+    const source = resolvePdfSource(book);
+
+    if (source.kind === 'http') {
+      return res.status(200).json({ signedUrl: source.url, provider: 'legacy' });
     }
-    return res.status(200).json({ signedUrl: book.pdfUrl });
+
+    if (source.kind === 'supabase') {
+      const signedUrl = await createPdfSignedUrl(source.path, 3600);
+      return res.status(200).json({ signedUrl, provider: 'supabase', expiresIn: 3600 });
+    }
+
+    return res.status(404).json({ message: 'Este libro no tiene PDF' });
   } catch (error) {
     return res.status(500).json({ message: 'Error al obtener URL del PDF', error: error.message });
   }

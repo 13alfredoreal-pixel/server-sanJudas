@@ -1,43 +1,39 @@
 import jwt from 'jsonwebtoken';
 
-export const generarJWT = (uid = '', email = '') => {
-  return new Promise((resolve, reject) => {
-    const payload = { uid, email };
-    jwt.sign(
-      payload,
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: '15m', // Tiempo de vida corto para seguridad
-      },
-      (err, token) => {
-        if (err) {
-          console.error(err);
-          reject('Error al generar token: ' + err.message);
-        } else {
-          resolve(token);
-        }
-      },
-    );
-  });
+const getAccessSecret = () => {
+  const secret = process.env.TOKEN_KEY;
+  if (!secret) throw new Error('TOKEN_KEY no está definido en .env');
+  return secret;
 };
 
-export const generarRefreshJWT = (uid = '') => {
-  return new Promise((resolve, reject) => {
-    const payload = { uid };
-    jwt.sign(
-      payload,
-      process.env.REFRESH_TOKEN_KEY || process.env.TOKEN_KEY, // Idealmente una clave secreta separada
-      {
-        expiresIn: '7d', // Refresh token dura 7 días
-      },
-      (err, token) => {
-        if (err) {
-          console.error(err);
-          reject('Error al generar refresh token');
-        } else {
-          resolve(token);
-        }
-      },
-    );
-  });
+const getRefreshSecret = () => {
+  const secret = process.env.REFRESH_TOKEN_KEY || process.env.TOKEN_KEY;
+  if (!secret) throw new Error('REFRESH_TOKEN_KEY (o TOKEN_KEY) no está definido en .env');
+  return secret;
 };
+
+export const generarJWT = (uid = '', email = '') =>
+  new Promise((resolve, reject) => {
+    jwt.sign({ uid, email }, getAccessSecret(), { expiresIn: '15m' }, (err, token) => {
+      if (err) {
+        console.error(err);
+        reject(`Error al generar token: ${err.message}`);
+      } else {
+        resolve(token);
+      }
+    });
+  });
+
+export const generarRefreshJWT = (uid = '') =>
+  new Promise((resolve, reject) => {
+    jwt.sign({ uid }, getRefreshSecret(), { expiresIn: '7d' }, (err, token) => {
+      if (err) {
+        console.error(err);
+        reject('Error al generar refresh token');
+      } else {
+        resolve(token);
+      }
+    });
+  });
+
+export { getAccessSecret, getRefreshSecret };
