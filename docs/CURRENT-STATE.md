@@ -47,6 +47,8 @@ Audit: `src/audit/` (logger, sin router).
 1. Prefijo `/api/*` y contrato en [API-CONTRACT.md](./API-CONTRACT.md).
 2. Auth: JWT Bearer + refresh cookie HttpOnly + Argon2.
 3. Roles: `USER_ROLE` | `ADMIN_ROLE`.
-4. Books/avatars: Cloudinary only (Multer memory).
+4. Books: PDF en **Supabase** (`pdfPublicId` = path); covers/avatars en **Cloudinary**.
 5. CORS allowlist con credentials.
 6. **pnpm** + ESM.
+
+Detalle PDF: [STORAGE-SUPABASE.md](./STORAGE-SUPABASE.md).

@@ -1,40 +1,54 @@
 ---
 name: bsjt-cloudinary-pdfs
 description: >-
-  Subida y entrega de PDFs/portadas vía Cloudinary en server-sanJudas. Usar al
-  tocar upload de libros, proxy PDF, signed URL, migrate-pdfs o configs/cloudinary.
+  Imágenes (portadas/avatars) en Cloudinary y PDFs en Supabase Storage.
+  Usar al tocar upload de libros, proxy PDF, signed URL, configs/cloudinary o configs/supabase.
 ---
 
-# BSJT — Cloudinary / PDFs
+# BSJT — Storage libros
 
-## Config
+## División
 
-- `configs/cloudinary.js` — env: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
-- Carpetas típicas: `biblioteca/pdfs`, `biblioteca/portadas` (o `SJT/…`).
+| Asset | Provider | Config |
+|-------|----------|--------|
+| PDF | **Supabase Storage** (bucket privado) | `configs/supabase.js`, `helpers/pdf-storage.js` |
+| Portada / avatar | **Cloudinary** | `configs/cloudinary.js` |
+
+Ver `docs/STORAGE-SUPABASE.md`.
+
+## Env
+
+```
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_PDF_BUCKET=biblioteca-pdfs
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
 
 ## Book fields
 
-- `pdfUrl`, `pdfPublicId` (required)
-- `coverUrl`, `coverPublicId` (optional)
+- `pdfPublicId` — path Supabase (`pdfs/...pdf`) o public_id Cloudinary legacy
+- `pdfUrl` — URL HTTP legacy Cloudinary; vacío en libros nuevos
+- `coverUrl` / `coverPublicId` — Cloudinary
 
 ## Endpoints
 
-| Método | Path                        | Notas                           |
-| ------ | --------------------------- | ------------------------------- |
-| POST   | `/api/books`                | Admin + multipart (PDF ± cover) |
-| GET    | `/api/books/:id/pdf`        | Proxy PDF (`servePdf`)          |
-| GET    | `/api/books/:id/signed-url` | JWT; URL temporal               |
-
-Estáticos legacy: `/api/pdfs` (JWT), `/api/uploads` (assets locales).
+| Método | Path                        | Notas                                          |
+| ------ | --------------------------- | ---------------------------------------------- |
+| POST   | `/api/books`                | Admin; PDF→Supabase, cover→Cloudinary          |
+| GET    | `/api/books/:id/pdf`        | Proxy JWT                                      |
+| GET    | `/api/books/:id/signed-url` | Signed Supabase (1h) o URL legacy              |
 
 ## Al implementar
 
-1. Subir a Cloudinary → guardar URL + publicId.
-2. Al borrar libro: destruir assets Cloudinary.
-3. Timeouts client ~120s para uploads grandes.
-4. Script legado: `migrate-pdfs-to-cloudinary.js` — no usarlo en flujo normal.
+1. PDF: `uploadPdfBuffer` → guardar path en `pdfPublicId`.
+2. Cover: Cloudinary image → `coverUrl`/`coverPublicId`.
+3. Delete: `removePdfObject` + destroy cover Cloudinary.
+4. Legacy: si `pdfUrl` es `https://…`, proxy/axios sigue funcionando.
 
 ## Seguridad
 
-- No exponer `api_secret`.
-- Preferir proxy/signed URL frente a URLs públicas permanentes cuando el flujo ya lo use.
+- Service role solo en server.
+- No exponer Cloudinary `api_secret` ni service role al client.

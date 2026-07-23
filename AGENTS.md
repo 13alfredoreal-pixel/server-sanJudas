@@ -18,13 +18,13 @@ REST API de la biblioteca digital institucional San Judas Tadeo. Autenticación 
 
 ## Stack
 
-| Capa   | Tecnología                    | Ruta                                     |
-| ------ | ----------------------------- | ---------------------------------------- |
-| HTTP   | Express 5 (ESM)               | `index.js`, `configs/app.js`             |
-| BD     | MongoDB + Mongoose            | `configs/db.js`, `src/**/*.model.js`     |
-| Auth   | JWT + Argon2 + cookie refresh | `src/auth/`, `middlewares/jwt-verify.js` |
-| Files  | Multer (memory) + Cloudinary  | `configs/cloudinary.js`, `src/books/`    |
-| Deploy | Vercel (`@vercel/node`)       | `vercel.json`                            |
+| Capa   | Tecnología                                                          | Ruta                                                      |
+| ------ | ------------------------------------------------------------------- | --------------------------------------------------------- |
+| HTTP   | Express 5 (ESM)                                                     | `index.js`, `configs/app.js`                              |
+| BD     | MongoDB + Mongoose                                                  | `configs/db.js`, `src/**/*.model.js`                      |
+| Auth   | JWT + Argon2 + cookie refresh                                       | `src/auth/`, `middlewares/jwt-verify.js`                  |
+| Files  | Multer (memory) + **Supabase** (PDFs) + **Cloudinary** (imágenes) | `configs/supabase.js`, `configs/cloudinary.js`, `src/books/` |
+| Deploy | Vercel (`@vercel/node`)                                             | `vercel.json`                                             |
 
 **Gestor de paquetes:** solo **pnpm** (`pnpm install`). No usar npm/yarn.
 
@@ -87,7 +87,7 @@ Admin seed: `src/users/user.seed.js` (`admin@sanjudas.edu.gt`).
 
 ## Dominio
 
-Libros PDF + portadas en Cloudinary; categorías; reseñas 1–5; favoritos y `readingProgress` en User; `AuditLog` en acciones admin. **Sin almacenamiento local de archivos.**
+Libros PDF en **Supabase Storage**; portadas/avatares en **Cloudinary**; categorías; reseñas 1–5; favoritos y `readingProgress` en User; `AuditLog` en acciones admin. **Sin almacenamiento local de archivos.** Ver [docs/STORAGE-SUPABASE.md](docs/STORAGE-SUPABASE.md).
 
 ## Convenciones
 

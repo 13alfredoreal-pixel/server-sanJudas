@@ -24,13 +24,17 @@ const bookSchema = new Schema(
       maxLength: [500, 'La descripción no puede tener más de 500 caracteres'],
       default: '',
     },
+    /** Legacy Cloudinary HTTP URL (libros antiguos). Nuevos: vacío. */
     pdfUrl: {
       type: String,
-      required: [true, 'El archivo PDF es obligatorio'],
+      default: '',
     },
+    /**
+     * Path en Supabase Storage (`pdfs/...pdf`) o public_id legacy Cloudinary.
+     */
     pdfPublicId: {
       type: String,
-      required: true,
+      required: [true, 'El archivo PDF es obligatorio'],
     },
     coverUrl: {
       type: String,

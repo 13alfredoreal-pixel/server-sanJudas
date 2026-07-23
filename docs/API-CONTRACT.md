@@ -46,7 +46,9 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 | GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF          |
 | GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`           |
 
-Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl`, `pdfPublicId`, `coverUrl`, `coverPublicId`, `uploadedBy`.
+Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl` (legacy HTTP opcional), `pdfPublicId` (path Supabase o id legacy), `coverUrl`, `coverPublicId`, `uploadedBy`.
+
+PDFs: **Supabase Storage**. Portadas: **Cloudinary**. Ver [STORAGE-SUPABASE.md](./STORAGE-SUPABASE.md).
 
 ## Categories — `/api/categories`
 
