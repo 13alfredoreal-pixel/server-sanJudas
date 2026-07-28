@@ -16,7 +16,7 @@
 | API versionada `/api/v1`                   | Hecho    | BSJT-009        |
 | Alinear client + tooling client            | Hecho    | client 007/008  |
 | Branding client Biblioteca Virtual SJT     | Hecho    | client BSJT-010 |
-| Deploy Vercel pnpm/argon2                  | En curso | BSJT-013        |
+| Deploy Vercel pnpm 11 + Corepack           | En curso | BSJT-014        |
 | Rotación secretos históricos en git        | Aplazado | —               |
 | Tests automatizados API                    | Aplazado | —               |
 

@@ -9,16 +9,33 @@
 | URL     | `https://base-rho-lyart.vercel.app`    |
 | Config  | `vercel.json`                          |
 | Node    | **22.x** (`engines` en `package.json`) |
-| PM      | **pnpm** (`packageManager` + lockfile) |
+| PM      | **pnpm@11.2.2** (Corepack en install)  |
 
-### Notas de build (BSJT-013)
+### Por qué fallaba un proyecto Vercel nuevo
 
-- `prepare` es `husky || true` para que el install no falle en Vercel (sin `.git` / sin husky en prod).
-- No fijar `NODE_ENV=production` en `vercel.json` (rompe install de scripts/devDeps).
-- `installCommand`: `pnpm install --frozen-lockfile`.
-- `argon2` permitido vía `pnpm.onlyBuiltDependencies` + `pnpm-workspace.yaml` `allowBuilds`.
+Vercel detecta `lockfileVersion: 9.0` y elige **pnpm 9/10**, que **no entiende** `pnpm@11` ni `allowBuilds` → `pnpm install` sale con 1.
 
-En el dashboard Vercel: Project Settings → General → Node.js Version → **22.x** (o dejar que `engines` lo fije).
+**Fix en repo (BSJT-014):** `installCommand` activa Corepack y fija `pnpm@11.2.2` antes del install. También `ENABLE_EXPERIMENTAL_COREPACK=1` en `vercel.json`.
+
+### Notas de build
+
+- `prepare`: `husky || true` (no tumba install en Vercel).
+- No fijar `NODE_ENV=production` en `vercel.json`.
+- `argon2`: `allowBuilds` en `pnpm-workspace.yaml`.
+
+## Crear / recrear el proyecto en Vercel (dueño de la cuenta)
+
+1. **Import Git Repository** → `server-sanJudas` (rama `master`).
+2. **Framework Preset:** Other.
+3. **Root Directory:** `.` (raíz del repo).
+4. **Build Command:** dejar vacío / no override (el entry es serverless vía `vercel.json`).
+5. **Output Directory:** vacío.
+6. **Install Command:** no override (usa el de `vercel.json`).
+7. **Node.js Version:** **22.x**.
+8. Añadir variables de entorno (abajo) **antes** del primer deploy si puedes; si no, el install igual debe pasar y el runtime fallará hasta configurarlas.
+9. Deploy.
+
+Si el log aún dice `Using pnpm@9.x`, confirma que el deploy usa el commit con BSJT-014 (`installCommand` con `corepack prepare pnpm@11.2.2`).
 
 ## Variables en Vercel
 
@@ -26,13 +43,15 @@ Configurar en el dashboard (no en git):
 
 - `URI_MONGODB`
 - `TOKEN_KEY`
+- `REFRESH_TOKEN_KEY`
 - `CLOUDINARY_CLOUD_NAME`
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `SUPABASE_PDF_BUCKET` (opcional, default `biblioteca-pdfs`)
-- `PORT` (si aplica en el runtime)
+- `ADMIN_PASSWORD` (solo si no hay admin en la DB)
+- `PORT` (si aplica)
 
 ## MongoDB
 

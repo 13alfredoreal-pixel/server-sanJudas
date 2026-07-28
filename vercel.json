@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "pnpm install --frozen-lockfile",
+  "installCommand": "corepack enable && corepack prepare pnpm@11.2.2 --activate && pnpm install --frozen-lockfile",
   "builds": [
     {
       "src": "index.js",
@@ -14,6 +14,7 @@
     }
   ],
   "env": {
+    "ENABLE_EXPERIMENTAL_COREPACK": "1",
     "LOG_LEVEL": "info"
   }
 }
