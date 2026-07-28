@@ -43,7 +43,7 @@ Audit: `src/audit/` (logger, sin router).
 
 ## Deuda consciente (aplazada)
 
-- Deploy Vercel (pnpm/argon2)
+- Deploy Vercel (pnpm/argon2) — **BSJT-013** (fix en curso)
 - Rotación de secretos históricos en git
 - Suite de tests automatizados
 

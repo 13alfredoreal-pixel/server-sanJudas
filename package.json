@@ -12,7 +12,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "lint-staged": {
     "*.js": [
@@ -56,6 +56,14 @@
     "lint-staged": "^17.1.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.9.6"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "argon2"
+    ]
   },
   "packageManager": "pnpm@11.2.2"
 }
