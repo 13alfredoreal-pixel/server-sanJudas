@@ -2,12 +2,23 @@
 
 ## Producción
 
-| Recurso | Valor                               |
-| ------- | ----------------------------------- |
-| Host    | Vercel                              |
-| Entry   | `index.js` vía `@vercel/node`       |
-| URL     | `https://base-rho-lyart.vercel.app` |
-| Config  | `vercel.json`                       |
+| Recurso | Valor                                  |
+| ------- | -------------------------------------- |
+| Host    | Vercel                                 |
+| Entry   | `index.js` vía `@vercel/node`          |
+| URL     | `https://base-rho-lyart.vercel.app`    |
+| Config  | `vercel.json`                          |
+| Node    | **22.x** (`engines` en `package.json`) |
+| PM      | **pnpm** (`packageManager` + lockfile) |
+
+### Notas de build (BSJT-013)
+
+- `prepare` es `husky || true` para que el install no falle en Vercel (sin `.git` / sin husky en prod).
+- No fijar `NODE_ENV=production` en `vercel.json` (rompe install de scripts/devDeps).
+- `installCommand`: `pnpm install --frozen-lockfile`.
+- `argon2` permitido vía `pnpm.onlyBuiltDependencies` + `pnpm-workspace.yaml` `allowBuilds`.
+
+En el dashboard Vercel: Project Settings → General → Node.js Version → **22.x** (o dejar que `engines` lo fije).
 
 ## Variables en Vercel
 

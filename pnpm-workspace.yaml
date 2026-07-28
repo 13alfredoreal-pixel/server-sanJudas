@@ -1,2 +1,6 @@
+# Single-package repo: keep workspace file for pnpm build allowlist (argon2).
+packages:
+  - '.'
+
 allowBuilds:
   argon2: true
