@@ -58,7 +58,7 @@
     "prettier": "^3.9.6"
   },
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
   "packageManager": "pnpm@11.2.2"
 }

@@ -27,7 +27,7 @@ Express 5 · Mongoose/MongoDB · JWT + Argon2 · Cloudinary · Multer · Helmet 
 
 ## Requisitos
 
-- Node.js 20+ (CI usa 22)
+- Node.js 20+ (CI / Vercel: **24.x**)
 - MongoDB (local o Atlas)
 - Cuenta Cloudinary (PDFs y portadas)
 

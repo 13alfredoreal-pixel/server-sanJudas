@@ -2,14 +2,14 @@
 
 ## Producción
 
-| Recurso | Valor                                  |
-| ------- | -------------------------------------- |
-| Host    | Vercel                                 |
-| Entry   | `index.js` vía `@vercel/node`          |
-| URL     | `https://base-rho-lyart.vercel.app`    |
-| Config  | `vercel.json`                          |
-| Node    | **22.x** (`engines` en `package.json`) |
-| PM      | **pnpm@11.2.2** (Corepack en install)  |
+| Recurso | Valor                                                  |
+| ------- | ------------------------------------------------------ |
+| Host    | Vercel                                                 |
+| Entry   | `index.js` vía `@vercel/node`                          |
+| URL     | `https://base-rho-lyart.vercel.app`                    |
+| Config  | `vercel.json`                                          |
+| Node    | **24.x** (default Vercel; `engines` en `package.json`) |
+| PM      | **pnpm@11.2.2** (Corepack en install)                  |
 
 ### Por qué fallaba un proyecto Vercel nuevo
 
@@ -31,7 +31,7 @@ Vercel detecta `lockfileVersion: 9.0` y elige **pnpm 9/10**, que **no entiende**
 4. **Build Command:** dejar vacío / no override (el entry es serverless vía `vercel.json`).
 5. **Output Directory:** vacío.
 6. **Install Command:** no override (usa el de `vercel.json`).
-7. **Node.js Version:** **22.x**.
+7. **Node.js Version:** **24.x** (o dejar el default de Vercel).
 8. Añadir variables de entorno (abajo) **antes** del primer deploy si puedes; si no, el install igual debe pasar y el runtime fallará hasta configurarlas.
 9. Deploy.
 
