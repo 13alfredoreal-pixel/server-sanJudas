@@ -37,6 +37,14 @@
     {
       "key": "adminPassword",
       "value": ""
+    },
+    {
+      "key": "pdfPublicId",
+      "value": ""
+    },
+    {
+      "key": "pdfSignedUploadUrl",
+      "value": ""
     }
   ],
   "auth": {
@@ -411,7 +419,35 @@
           }
         },
         {
-          "name": "Upload book (admin)",
+          "name": "Create PDF upload URL (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const j = pm.response.json();",
+                  "  if (j.path) pm.collectionVariables.set('pdfPublicId', j.path);",
+                  "  if (j.signedUrl) pm.collectionVariables.set('pdfSignedUploadUrl', j.signedUrl);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Libro Postman {{$timestamp}}\"\n}"
+            },
+            "url": "{{baseUrl}}/books/upload-url",
+            "description": "Admin. Devuelve signedUrl + path. Luego PUT del PDF a signedUrl (fuera de Postman o con Send Binary)."
+          }
+        },
+        {
+          "name": "Upload book with pdfPublicId (admin)",
           "event": [
             {
               "listen": "test",
@@ -449,14 +485,14 @@
                 },
                 {
                   "key": "description",
-                  "value": "Subida de prueba BSJT",
+                  "value": "Subida vía signed upload BSJT-016",
                   "type": "text"
                 },
                 {
-                  "key": "pdf",
-                  "type": "file",
-                  "src": [],
-                  "description": "Obligatorio — PDF (va a Supabase)"
+                  "key": "pdfPublicId",
+                  "value": "{{pdfPublicId}}",
+                  "type": "text",
+                  "description": "Path de Create PDF upload URL (tras PUT a signedUrl)"
                 },
                 {
                   "key": "cover",
@@ -467,7 +503,67 @@
               ]
             },
             "url": "{{baseUrl}}/books",
-            "description": "Requiere ADMIN_ROLE. PDF → Supabase; cover → Cloudinary."
+            "description": "Flujo canónico prod: pdfPublicId ya en Supabase. Cover opcional."
+          }
+        },
+        {
+          "name": "Upload book multipart pdf (admin, legacy/local)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const j = pm.response.json();",
+                  "  if (j.book?._id) pm.collectionVariables.set('bookId', j.book._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Libro Postman {{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "author",
+                  "value": "Autor Prueba",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "arte",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Subida multipart (tope ~4.5MB en Vercel)",
+                  "type": "text"
+                },
+                {
+                  "key": "pdf",
+                  "type": "file",
+                  "src": [],
+                  "description": "Legacy/local — PDF por body del API"
+                },
+                {
+                  "key": "cover",
+                  "type": "file",
+                  "src": [],
+                  "description": "Opcional — imagen (Cloudinary)"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/books",
+            "description": "Solo para PDFs pequeños / local. En Vercel preferir upload-url + pdfPublicId."
           }
         },
         {

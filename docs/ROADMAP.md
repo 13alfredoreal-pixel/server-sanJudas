@@ -17,6 +17,7 @@
 | Alinear client + tooling client            | Hecho    | client 007/008  |
 | Branding client Biblioteca Virtual SJT     | Hecho    | client BSJT-010 |
 | Deploy Vercel pnpm 11 + Corepack           | En curso | BSJT-014        |
+| Signed upload PDF (bypass Vercel 4.5 MB)   | En curso | BSJT-016        |
 | Rotación secretos históricos en git        | Aplazado | —               |
 | Tests automatizados API                    | Aplazado | —               |
 

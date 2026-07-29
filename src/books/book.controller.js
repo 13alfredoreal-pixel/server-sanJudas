@@ -8,6 +8,10 @@ import {
   uploadPdfBuffer,
   removePdfObject,
   createPdfSignedUrl,
+  createPdfSignedUploadUrl,
+  buildPdfObjectPath,
+  pdfObjectExists,
+  PDF_OBJECT_PATH_RE,
   downloadPdfObject,
   resolvePdfSource,
 } from '../../helpers/pdf-storage.js';
@@ -78,11 +82,30 @@ export const getBookById = async (req, res) => {
   }
 };
 
+/**
+ * Genera URL firmada para subir el PDF directo a Supabase (evita el tope ~4.5 MB de Vercel).
+ * Body JSON: `{ title?: string }`
+ */
+export const createPdfUploadUrl = async (req, res) => {
+  try {
+    const title = (req.body?.title || '').trim() || 'libro';
+    const path = buildPdfObjectPath(title);
+    const upload = await createPdfSignedUploadUrl(path);
+    return res.status(200).json(upload);
+  } catch (error) {
+    console.error('[BOOK UPLOAD-URL ERROR]', error);
+    return res
+      .status(500)
+      .json({ message: 'Error al generar URL de subida del PDF', error: error.message });
+  }
+};
+
 export const uploadBook = async (req, res) => {
   try {
     const { title, author, category, description } = req.body;
     const cleanTitle = (title || '').trim();
     const cleanAuthor = (author || '').trim();
+    const pdfPublicIdFromBody = (req.body?.pdfPublicId || '').trim();
 
     if (!cleanTitle || !cleanAuthor) {
       return res.status(400).json({ message: 'El título y el autor son obligatorios' });
@@ -91,20 +114,10 @@ export const uploadBook = async (req, res) => {
     const pdfFile = req.files?.pdf?.[0];
     const coverFile = req.files?.cover?.[0];
 
-    if (!pdfFile) {
-      return res.status(400).json({ message: 'El archivo PDF es obligatorio' });
-    }
-
-    const pdfType = await fileTypeFromBuffer(pdfFile.buffer);
-    const isActuallyPdf = pdfType && pdfType.mime === 'application/pdf';
-    const isReportedAsPdf = pdfFile.mimetype === 'application/pdf';
-
-    if (!isActuallyPdf && !isReportedAsPdf) {
+    if (!pdfFile && !pdfPublicIdFromBody) {
       return res.status(400).json({
-        message: 'El archivo proporcionado no es un PDF válido.',
-        details: pdfType
-          ? `Detectado como: ${pdfType.mime}`
-          : 'No se pudo verificar la firma digital del archivo',
+        message:
+          'Debes enviar el PDF (multipart) o pdfPublicId tras subirlo con POST /books/upload-url',
       });
     }
 
@@ -120,21 +133,45 @@ export const uploadBook = async (req, res) => {
       }
     }
 
-    const timestamp = Date.now();
-    const safeName = cleanTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const pdfPath = `pdfs/${safeName}_${timestamp}.pdf`;
+    let storedPdfPath;
 
-    // PDF → Supabase Storage (blob; sin límite de páginas tipo Cloudinary)
-    const { path: storedPdfPath } = await uploadPdfBuffer(
-      pdfFile.buffer,
-      pdfPath,
-      pdfFile.mimetype || 'application/pdf',
-    );
+    if (pdfPublicIdFromBody) {
+      if (!PDF_OBJECT_PATH_RE.test(pdfPublicIdFromBody)) {
+        return res.status(400).json({ message: 'pdfPublicId inválido' });
+      }
+      const exists = await pdfObjectExists(pdfPublicIdFromBody);
+      if (!exists) {
+        return res.status(400).json({
+          message: 'El PDF no existe en Storage. Súbelo primero con la URL firmada.',
+        });
+      }
+      storedPdfPath = pdfPublicIdFromBody;
+    } else {
+      const pdfType = await fileTypeFromBuffer(pdfFile.buffer);
+      const isActuallyPdf = pdfType && pdfType.mime === 'application/pdf';
+      const isReportedAsPdf = pdfFile.mimetype === 'application/pdf';
+
+      if (!isActuallyPdf && !isReportedAsPdf) {
+        return res.status(400).json({
+          message: 'El archivo proporcionado no es un PDF válido.',
+          details: pdfType
+            ? `Detectado como: ${pdfType.mime}`
+            : 'No se pudo verificar la firma digital del archivo',
+        });
+      }
+
+      const pdfPath = buildPdfObjectPath(cleanTitle);
+      const uploaded = await uploadPdfBuffer(
+        pdfFile.buffer,
+        pdfPath,
+        pdfFile.mimetype || 'application/pdf',
+      );
+      storedPdfPath = uploaded.path;
+    }
 
     let coverUrl = '';
     let coverPublicId = '';
 
-    // Portada → Cloudinary (imagen)
     if (coverFile) {
       const coverResult = await uploadBufferToCloudinary(coverFile.buffer, {
         folder: 'biblioteca/portadas',
@@ -150,7 +187,6 @@ export const uploadBook = async (req, res) => {
       author: cleanAuthor,
       category: category && category.trim() !== '' ? category : 'Otros',
       description: description || '',
-      // pdfUrl vacío en libros nuevos; el acceso va por path (pdfPublicId) + signed/proxy
       pdfUrl: '',
       pdfPublicId: storedPdfPath,
       coverUrl,

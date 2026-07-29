@@ -2,8 +2,24 @@ import { supabase, PDF_BUCKET } from '../configs/supabase.js';
 
 const isHttpUrl = (value = '') => /^https?:\/\//i.test(value);
 
+/** Paths generados por el API: `pdfs/{safeTitle}_{timestamp}.pdf` */
+export const PDF_OBJECT_PATH_RE = /^pdfs\/[a-z0-9_]+_\d+\.pdf$/i;
+
+/**
+ * Construye un path de objeto en el bucket (solo server; no confiar en path del client).
+ */
+export const buildPdfObjectPath = (title = 'libro') => {
+  const timestamp = Date.now();
+  const safeName =
+    String(title)
+      .replace(/[^a-z0-9]+/gi, '_')
+      .toLowerCase() || 'libro';
+  return `pdfs/${safeName}_${timestamp}.pdf`;
+};
+
 /**
  * Sube un PDF (Buffer) al bucket privado.
+ * Uso legacy / local: el body pasa por el API (límite ~4.5 MB en Vercel).
  * @returns {{ path: string }}
  */
 export const uploadPdfBuffer = async (buffer, objectPath, contentType = 'application/pdf') => {
@@ -17,6 +33,34 @@ export const uploadPdfBuffer = async (buffer, objectPath, contentType = 'applica
   }
 
   return { path: data.path };
+};
+
+/**
+ * URL firmada para que el client suba el PDF directo a Supabase (válida ~2 h).
+ * @returns {{ path: string, signedUrl: string, token: string, expiresIn: number }}
+ */
+export const createPdfSignedUploadUrl = async (objectPath) => {
+  const { data, error } = await supabase.storage.from(PDF_BUCKET).createSignedUploadUrl(objectPath);
+
+  if (error) {
+    throw new Error(`Supabase signed upload URL failed: ${error.message}`);
+  }
+
+  return {
+    path: data.path,
+    signedUrl: data.signedUrl,
+    token: data.token,
+    expiresIn: 7200,
+  };
+};
+
+/**
+ * Comprueba si un path ya existe en el bucket (p. ej. tras signed upload del client).
+ */
+export const pdfObjectExists = async (objectPath) => {
+  if (!objectPath || isHttpUrl(objectPath)) return false;
+  const { data, error } = await supabase.storage.from(PDF_BUCKET).createSignedUrl(objectPath, 60);
+  return !error && Boolean(data?.signedUrl);
 };
 
 export const removePdfObject = async (objectPath) => {

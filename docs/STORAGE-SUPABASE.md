@@ -23,18 +23,25 @@ SUPABASE_PDF_BUCKET=biblioteca-pdfs
 
 ## Comportamiento API
 
-| Acción                             | Storage                                                        |
-| ---------------------------------- | -------------------------------------------------------------- |
-| `POST /api/v1/books` (pdf)         | Supabase path → `Book.pdfPublicId`                             |
-| `POST /api/v1/books` (cover)       | Cloudinary → `coverUrl` / `coverPublicId`                      |
-| `GET /api/v1/books/:id/signed-url` | Signed URL Supabase (1h) o URL legacy Cloudinary               |
-| `GET /api/v1/books/:id/pdf`        | Proxy stream (Supabase o HTTP legacy)                          |
-| `DELETE /api/v1/books/:id`         | Borra PDF en Supabase (o Cloudinary legacy) + cover Cloudinary |
+| Acción                                 | Storage                                                        |
+| -------------------------------------- | -------------------------------------------------------------- |
+| `POST /api/v1/books/upload-url`        | Genera signed **upload** URL (~2 h) + `path` (`pdfs/…pdf`)     |
+| Client `PUT` a `signedUrl`             | PDF directo al bucket (sin pasar por Vercel body)              |
+| `POST /api/v1/books` (`pdfPublicId`)   | Verifica objeto en bucket → `Book.pdfPublicId`                 |
+| `POST /api/v1/books` (multipart `pdf`) | Legacy/local: buffer → Supabase (tope ~4.5 MB en Vercel)       |
+| `POST /api/v1/books` (cover)           | Cloudinary → `coverUrl` / `coverPublicId`                      |
+| `GET /api/v1/books/:id/signed-url`     | Signed URL lectura Supabase (1h) o URL legacy Cloudinary       |
+| `GET /api/v1/books/:id/pdf`            | Proxy stream (Supabase o HTTP legacy)                          |
+| `DELETE /api/v1/books/:id`             | Borra PDF en Supabase (o Cloudinary legacy) + cover Cloudinary |
 
 Libros **antiguos** con `pdfUrl` https (Cloudinary) siguen leyéndose por proxy (`resolvePdfSource` → `kind: 'http'`).
 
 Libros **nuevos**: `pdfUrl` vacío; `pdfPublicId` = path Supabase. No migrar en masa salvo ticket explícito.
 
+## Límite Vercel
+
+Las Functions rechazan bodies > ~4.5 MB. Por eso el flujo canónico es **signed upload** + metadata; no subir el PDF completo por `POST /books` en producción.
+
 ## Nota de seguridad
 
-Usar siempre la **service role** en el backend. El SPA solo obtiene el PDF vía endpoints JWT del API.
+Usar siempre la **service role** en el backend. El SPA **no** recibe la service role: solo URLs firmadas (upload o lectura) emitidas por el API con JWT admin/usuario.

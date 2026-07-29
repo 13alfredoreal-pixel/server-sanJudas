@@ -4,6 +4,7 @@ import { isAdmin } from '../../middlewares/is-admin.js';
 import {
   getBooks,
   getBookById,
+  createPdfUploadUrl,
   uploadBook,
   deleteBook,
   getPdfSignedUrl,
@@ -15,6 +16,9 @@ import { uploadBookFiles } from '../../middlewares/book-multer.js';
 const router = Router();
 
 router.get('/', validateJWT, authenticatedLimiter, getBooks);
+
+router.post('/upload-url', validateJWT, authenticatedLimiter, isAdmin, createPdfUploadUrl);
+
 router.get('/:id', validateJWT, authenticatedLimiter, getBookById);
 
 router.post(
