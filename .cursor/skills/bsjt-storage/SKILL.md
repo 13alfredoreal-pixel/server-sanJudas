@@ -35,20 +35,23 @@ CLOUDINARY_API_SECRET=
 
 ## Endpoints
 
-| Método | Path                           | Notas                                 |
-| ------ | ------------------------------ | ------------------------------------- |
-| POST   | `/api/v1/books`                | Admin; PDF→Supabase, cover→Cloudinary |
-| GET    | `/api/v1/books/:id/pdf`        | Proxy JWT                             |
-| GET    | `/api/v1/books/:id/signed-url` | Signed Supabase (1h) o URL legacy     |
+| Método | Path                           | Notas                                           |
+| ------ | ------------------------------ | ----------------------------------------------- |
+| POST   | `/api/v1/books/upload-url`     | Admin; signed upload PDF (bypass Vercel 4.5 MB) |
+| POST   | `/api/v1/books`                | Admin; `pdfPublicId` o multipart `pdf` + cover  |
+| GET    | `/api/v1/books/:id/pdf`        | Proxy JWT                                       |
+| GET    | `/api/v1/books/:id/signed-url` | Signed lectura Supabase (1h) o URL legacy       |
 
 ## Al implementar
 
-1. PDF: `uploadPdfBuffer` → guardar path en `pdfPublicId`.
-2. Cover: Cloudinary image → `coverUrl`/`coverPublicId`.
-3. Delete: `removePdfObject` + destroy cover Cloudinary.
-4. Legacy: si `pdfUrl` es `https://…`, proxy/axios sigue funcionando.
+1. Prod: `createPdfSignedUploadUrl` → client PUT → `POST /books` con `pdfPublicId`.
+2. Legacy/local: `uploadPdfBuffer` → path en `pdfPublicId` (no usar para PDFs grandes en Vercel).
+3. Cover: Cloudinary image → `coverUrl`/`coverPublicId`.
+4. Delete: `removePdfObject` + destroy cover Cloudinary.
+5. Legacy lectura: si `pdfUrl` es `https://…`, proxy/axios sigue funcionando.
 
 ## Seguridad
 
 - Service role solo en server.
 - No exponer Cloudinary `api_secret` ni service role al client.
+- Validar `pdfPublicId` con `PDF_OBJECT_PATH_RE` + `pdfObjectExists` antes de crear el Book.

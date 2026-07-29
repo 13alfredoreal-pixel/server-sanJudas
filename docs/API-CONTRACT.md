@@ -40,14 +40,22 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 
 ## Books — `/api/v1/books`
 
-| Método | Path              | Auth      | Notas                                               |
-| ------ | ----------------- | --------- | --------------------------------------------------- |
-| GET    | `/`               | JWT       | Filtros + paginación                                |
-| GET    | `/:id`            | JWT       | Detalle                                             |
-| POST   | `/`               | Admin     | Multipart: `pdf`, `cover`                           |
-| DELETE | `/:id`            | Admin     | Borra DB + PDF (Supabase/legacy) + cover Cloudinary |
-| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF                                    |
-| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`                                     |
+| Método | Path              | Auth      | Notas                                                             |
+| ------ | ----------------- | --------- | ----------------------------------------------------------------- |
+| GET    | `/`               | JWT       | Filtros + paginación                                              |
+| GET    | `/:id`            | JWT       | Detalle                                                           |
+| POST   | `/upload-url`     | Admin     | JSON `{ title? }` → `{ path, signedUrl, token, expiresIn }` (PDF) |
+| POST   | `/`               | Admin     | Multipart: `pdfPublicId` **o** `pdf`, + `cover` opcional          |
+| DELETE | `/:id`            | Admin     | Borra DB + PDF (Supabase/legacy) + cover Cloudinary               |
+| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF                                                  |
+| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`                                                   |
+
+**Alta de libros (prod / Vercel):** el body de una Function está limitado a ~**4.5 MB**. Flujo recomendado:
+
+1. `POST /upload-url` → subir el PDF con `PUT` a `signedUrl` (directo a Supabase).
+2. `POST /` con form fields + `pdfPublicId` (= `path`) y `cover` opcional (imagen pequeña → Cloudinary).
+
+Multipart con archivo `pdf` sigue válido en local / PDFs pequeños, pero **no** para libros grandes en Vercel.
 
 Campos Book relevantes: `title`, `author`, `category`, `description`, `pdfUrl` (legacy HTTP opcional), `pdfPublicId` (path Supabase o id legacy), `coverUrl`, `coverPublicId`, `uploadedBy`.
 
