@@ -44,11 +44,12 @@ CLOUDINARY_API_SECRET=
 
 ## Al implementar
 
-1. Prod: `createPdfSignedUploadUrl` → client PUT → `POST /books` con `pdfPublicId`.
-2. Legacy/local: `uploadPdfBuffer` → path en `pdfPublicId` (no usar para PDFs grandes en Vercel).
-3. Cover: Cloudinary image → `coverUrl`/`coverPublicId`.
-4. Delete: `removePdfObject` + destroy cover Cloudinary.
-5. Legacy lectura: si `pdfUrl` es `https://…`, proxy/axios sigue funcionando.
+1. Prod lectura: `resolvePdfSource` → HTTP legacy, `pdfs/*.pdf` (signed URL), o Cloudinary raw.
+2. Prod alta: `createPdfSignedUploadUrl` → client PUT → `POST /books` con `pdfPublicId`.
+3. Legacy/local: `uploadPdfBuffer` → path en `pdfPublicId` (no usar para PDFs grandes en Vercel).
+4. Cover: Cloudinary image → `coverUrl`/`coverPublicId`.
+5. Delete: `removePdfObject` + destroy cover Cloudinary.
+6. Legacy lectura: si `pdfUrl` es `https://…`, proxy/axios sigue funcionando.
 
 ## Seguridad
 

@@ -2,7 +2,7 @@
 
 Fuente de verdad entre **server-sanJudas** y **client-sanjudas**. Actualizar en el mismo PR que cambie endpoints o shapes.
 
-Base URL prod: `https://base-rho-lyart.vercel.app/api/v1`  
+Base URL prod: `https://server-san-judas-tau.vercel.app/api/v1`  
 Local: `http://localhost:<PORT>/api/v1`
 
 **Versión canónica:** `v1` (`/api/v1/...`).  
@@ -40,15 +40,15 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 
 ## Books — `/api/v1/books`
 
-| Método | Path              | Auth      | Notas                                                             |
-| ------ | ----------------- | --------- | ----------------------------------------------------------------- |
-| GET    | `/`               | JWT       | Filtros + paginación                                              |
-| GET    | `/:id`            | JWT       | Detalle                                                           |
-| POST   | `/upload-url`     | Admin     | JSON `{ title? }` → `{ path, signedUrl, token, expiresIn }` (PDF) |
-| POST   | `/`               | Admin     | Multipart: `pdfPublicId` **o** `pdf`, + `cover` opcional          |
-| DELETE | `/:id`            | Admin     | Borra DB + PDF (Supabase/legacy) + cover Cloudinary               |
-| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF                                                  |
-| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }`                                                   |
+| Método | Path              | Auth      | Notas                                                              |
+| ------ | ----------------- | --------- | ------------------------------------------------------------------ |
+| GET    | `/`               | JWT       | Filtros + paginación                                               |
+| GET    | `/:id`            | JWT       | Detalle                                                            |
+| POST   | `/upload-url`     | Admin     | JSON `{ title? }` → `{ path, signedUrl, token, expiresIn }` (PDF)  |
+| POST   | `/`               | Admin     | Multipart: `pdfPublicId` **o** `pdf`, + `cover` opcional           |
+| DELETE | `/:id`            | Admin     | Borra DB + PDF (Supabase/legacy) + cover Cloudinary                |
+| GET    | `/:id/pdf`        | Ver impl. | Proxy stream PDF                                                   |
+| GET    | `/:id/signed-url` | JWT       | `{ signedUrl }` (404/502 si Storage falla; legacy HTTP/Cloudinary) |
 
 **Alta de libros (prod / Vercel):** el body de una Function está limitado a ~**4.5 MB**. Flujo recomendado:
 

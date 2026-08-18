@@ -16,10 +16,10 @@ git clone https://github.com/13alfredoreal-pixel/server-sanJudas.git
 git clone https://github.com/13alfredoreal-pixel/client-sanjudas.git
 ```
 
-| Capa            | URL prod                          |
-| --------------- | --------------------------------- |
-| API (este repo) | https://base-rho-lyart.vercel.app |
-| SPA             | https://biblioteca-sjt.web.app    |
+| Capa            | URL prod                                |
+| --------------- | --------------------------------------- |
+| API (este repo) | https://server-san-judas-tau.vercel.app |
+| SPA             | https://biblioteca-sjt.web.app          |
 
 ## Stack
 
@@ -63,7 +63,7 @@ Ver [`.env.example`](./.env.example). Nunca subas `.env` al remoto.
 
 Vercel (`vercel.json` → `index.js` con `@vercel/node`). Detalle: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
-Producción actual: `https://base-rho-lyart.vercel.app`
+Producción actual: `https://server-san-judas-tau.vercel.app`
 
 ## Estructura
 
