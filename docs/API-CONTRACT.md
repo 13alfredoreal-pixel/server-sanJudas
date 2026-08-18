@@ -44,6 +44,7 @@ Roles: `USER_ROLE` | `ADMIN_ROLE`.
 | ------ | ----------------- | --------- | ------------------------------------------------------------------ |
 | GET    | `/`               | JWT       | Filtros + paginación                                               |
 | GET    | `/:id`            | JWT       | Detalle                                                            |
+| GET    | `/storage-health` | Admin     | Diagnóstico Storage (sin secretos); 200/502                        |
 | POST   | `/upload-url`     | Admin     | JSON `{ title? }` → `{ path, signedUrl, token, expiresIn }` (PDF)  |
 | POST   | `/`               | Admin     | Multipart: `pdfPublicId` **o** `pdf`, + `cover` opcional           |
 | DELETE | `/:id`            | Admin     | Borra DB + PDF (Supabase/legacy) + cover Cloudinary                |

@@ -14,6 +14,8 @@ import {
   PDF_OBJECT_PATH_RE,
   downloadPdfObject,
   resolvePdfSource,
+  inspectPdfStorage,
+  storageFailureHint,
 } from '../../helpers/pdf-storage.js';
 import { isMongoObjectId } from '../../helpers/mongo-id.js';
 
@@ -87,6 +89,20 @@ export const getBookById = async (req, res) => {
   }
 };
 
+export const getPdfStorageHealth = async (_req, res) => {
+  try {
+    const report = await inspectPdfStorage();
+    return res.status(report.ok ? 200 : 502).json(report);
+  } catch (error) {
+    return res.status(502).json({
+      ok: false,
+      message: 'No se pudo diagnosticar Storage',
+      error: error.message,
+      hint: storageFailureHint(error.message),
+    });
+  }
+};
+
 /**
  * Genera URL firmada para subir el PDF directo a Supabase (evita el tope ~4.5 MB de Vercel).
  * Body JSON: `{ title?: string }`
@@ -99,15 +115,12 @@ export const createPdfUploadUrl = async (req, res) => {
     return res.status(200).json(upload);
   } catch (error) {
     console.error('[BOOK UPLOAD-URL ERROR]', error);
-    if (error.status === 503 || error.status === 502 || error.name === 'PdfStorageError') {
-      return res.status(error.status || 502).json({
-        message: 'Error al generar URL de subida del PDF',
-        error: error.message,
-      });
-    }
-    return res
-      .status(500)
-      .json({ message: 'Error al generar URL de subida del PDF', error: error.message });
+    const status = error.status === 503 || error.status === 502 ? error.status : 502;
+    return res.status(status).json({
+      message: 'No se pudo generar la URL de subida del PDF (Supabase)',
+      error: error.message,
+      hint: storageFailureHint(error.message),
+    });
   }
 };
 
@@ -231,6 +244,7 @@ export const uploadBook = async (req, res) => {
       return res.status(error.status || 502).json({
         message: 'No se pudo guardar el PDF en Storage',
         error: error.message,
+        hint: storageFailureHint(error.message),
       });
     }
     return res
@@ -365,6 +379,10 @@ export const getPdfSignedUrl = async (req, res) => {
         : status === 502
           ? 'No se pudo firmar el PDF en Storage'
           : 'Error al obtener URL del PDF';
-    return res.status(status).json({ message, error: error.message });
+    return res.status(status).json({
+      message,
+      error: error.message,
+      hint: status === 404 ? undefined : storageFailureHint(error.message),
+    });
   }
 };

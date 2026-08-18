@@ -42,6 +42,17 @@ Libros **nuevos**: `pdfUrl` vacío; `pdfPublicId` = path Supabase. No migrar en 
 
 Las Functions rechazan bodies > ~4.5 MB. Por eso el flujo canónico es **signed upload** + metadata; no subir el PDF completo por `POST /books` en producción.
 
+## Troubleshooting 502 (`upload-url` / `signed-url`)
+
+El API **no** sube el PDF en el body. Si esas rutas dan 502, Storage no responde.
+
+1. Dashboard Supabase → **Project Settings → API**:
+   - `SUPABASE_URL` = Project URL (`https://<ref>.supabase.co`). El host debe resolver (proyecto no borrado).
+   - `SUPABASE_SERVICE_ROLE_KEY` = **service_role** (JWT largo `eyJ...`) o **secret key** `sb_secret_...` **completa**. No uses `anon` / `sb_publishable_`.
+2. **Storage** → bucket privado `biblioteca-pdfs`.
+3. Pegar las mismas variables en **Vercel → Project → Environment Variables** (Production) y **Redeploy**.
+4. Admin autenticado: `GET /api/v1/books/storage-health` (diagnóstico sin secretos).
+
 ## Nota de seguridad
 
 Usar siempre la **service role** en el backend. El SPA **no** recibe la service role: solo URLs firmadas (upload o lectura) emitidas por el API con JWT admin/usuario.

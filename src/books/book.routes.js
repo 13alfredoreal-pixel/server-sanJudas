@@ -9,6 +9,7 @@ import {
   deleteBook,
   getPdfSignedUrl,
   servePdf,
+  getPdfStorageHealth,
 } from './book.controller.js';
 import { authenticatedLimiter } from '../../middlewares/request-limit.js';
 import { uploadBookFiles } from '../../middlewares/book-multer.js';
@@ -18,6 +19,7 @@ const router = Router();
 router.get('/', validateJWT, authenticatedLimiter, getBooks);
 
 router.post('/upload-url', validateJWT, authenticatedLimiter, isAdmin, createPdfUploadUrl);
+router.get('/storage-health', validateJWT, authenticatedLimiter, isAdmin, getPdfStorageHealth);
 
 router.get('/:id', validateJWT, authenticatedLimiter, getBookById);
 

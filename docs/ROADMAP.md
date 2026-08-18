@@ -18,7 +18,8 @@
 | Branding client Biblioteca Virtual SJT       | Hecho    | client BSJT-010 |
 | Deploy Vercel pnpm 11 + Corepack             | En curso | BSJT-014        |
 | Signed upload PDF (bypass Vercel 4.5 MB)     | Hecho    | BSJT-016        |
-| signed-url: no 500 genérico (Storage/legacy) | En curso | BSJT-018        |
+| signed-url: no 500 genérico (Storage/legacy) | Hecho    | BSJT-018        |
+| Storage health + 502 con pista de env        | En curso | BSJT-020        |
 | Rotación secretos históricos en git          | Aplazado | —               |
 | Tests automatizados API                      | Aplazado | —               |
 
