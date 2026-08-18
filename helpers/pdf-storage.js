@@ -144,3 +144,74 @@ export const resolvePdfSource = (book = {}) => {
   }
   return { kind: 'none' };
 };
+
+const STORAGE_HINT =
+  'En Vercel: SUPABASE_URL = Project URL (https://xxxx.supabase.co, debe resolver DNS), SUPABASE_SERVICE_ROLE_KEY = JWT service_role (eyJ...) o sb_secret_ completo, bucket privado biblioteca-pdfs. Luego Redeploy.';
+
+export const storageFailureHint = (errorMessage = '') => {
+  if (/fetch failed|ENOTFOUND|getaddrinfo|Could not resolve/i.test(errorMessage)) {
+    return `Supabase no es alcanzable (${errorMessage}). ${STORAGE_HINT}`;
+  }
+  return `${STORAGE_HINT}`;
+};
+
+/** Diagnóstico admin: sin secretos. */
+export const inspectPdfStorage = async () => {
+  const url = process.env.SUPABASE_URL?.trim() || '';
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || '';
+  let host = '';
+  try {
+    host = new URL(url).host;
+  } catch {
+    /* URL inválida */
+  }
+
+  const keyKind =
+    key.startsWith('eyJ') && key.split('.').length === 3
+      ? 'jwt'
+      : key.startsWith('sb_secret_')
+        ? 'sb_secret'
+        : key.startsWith('sb_publishable_')
+          ? 'sb_publishable'
+          : key
+            ? 'unknown'
+            : 'missing';
+
+  const report = {
+    ok: false,
+    urlHost: host || null,
+    urlLooksValid: Boolean(host && host.endsWith('.supabase.co')),
+    keyKind,
+    keyLength: key.length,
+    bucket: PDF_BUCKET,
+    buckets: null,
+    bucketExists: false,
+    listBucketsError: null,
+    hint: STORAGE_HINT,
+  };
+
+  if (!url || !key) {
+    report.hint = 'Faltan SUPABASE_URL o SUPABASE_SERVICE_ROLE_KEY en el entorno de Vercel.';
+    return report;
+  }
+
+  try {
+    const { data, error } = await getSupabase().storage.listBuckets();
+    if (error) {
+      report.listBucketsError = error.message;
+      report.hint = storageFailureHint(error.message);
+      return report;
+    }
+    report.buckets = (data || []).map((b) => b.name);
+    report.bucketExists = report.buckets.includes(PDF_BUCKET);
+    report.ok = report.bucketExists;
+    if (!report.bucketExists) {
+      report.hint = `Crea el bucket privado "${PDF_BUCKET}" en Supabase → Storage.`;
+    }
+  } catch (error) {
+    report.listBucketsError = error.message;
+    report.hint = storageFailureHint(error.message);
+  }
+
+  return report;
+};
