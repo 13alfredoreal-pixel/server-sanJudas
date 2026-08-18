@@ -45,6 +45,7 @@ Audit: `src/audit/` (logger, sin router).
 
 - Deploy Vercel (pnpm/argon2) — **BSJT-013/014/015** (ops)
 - Signed upload PDF (bypass body 4.5 MB) — **BSJT-016** (+ client **BSJT-017**)
+- signed-url 500 (clasificar PDF / Storage) — **BSJT-018**
 - Rotación de secretos históricos en git
 - Suite de tests automatizados
 

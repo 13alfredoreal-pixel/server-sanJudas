@@ -2,14 +2,14 @@
 
 ## Producción
 
-| Recurso | Valor                                                  |
-| ------- | ------------------------------------------------------ |
-| Host    | Vercel                                                 |
-| Entry   | `index.js` vía `@vercel/node`                          |
-| URL     | `https://base-rho-lyart.vercel.app`                    |
-| Config  | `vercel.json`                                          |
-| Node    | **24.x** (default Vercel; `engines` en `package.json`) |
-| PM      | **pnpm@11.2.2** (Corepack en install)                  |
+| Recurso | Valor                                                            |
+| ------- | ---------------------------------------------------------------- |
+| Host    | Vercel                                                           |
+| Entry   | `index.js` vía `@vercel/node`                                    |
+| URL     | `https://server-san-judas-tau.vercel.app` (Hobby `*.vercel.app`) |
+| Config  | `vercel.json`                                                    |
+| Node    | **24.x** (default Vercel; `engines` en `package.json`)           |
+| PM      | **pnpm@11.2.2** (Corepack en install)                            |
 
 ### Por qué fallaba un proyecto Vercel nuevo
 

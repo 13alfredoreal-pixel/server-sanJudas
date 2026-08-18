@@ -7,6 +7,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'https://biblioteca-sjt.web.app',
+  'https://biblioteca-sjt.firebaseapp.com',
 ];
 
 // Configuración CORS con orígenes específicos (requerido cuando credentials: true)
